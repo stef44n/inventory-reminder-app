@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ItemType {
+  CONSUMABLE
+  CHARGEABLE
+  EXPIRY
+  SUBSCRIPTION
+}
+
+enum DeviceType {
+  MOBILE
+  DESKTOP
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  items             Item[]
+  pushSubscriptions PushSubscription[]
+}
+
+model Item {
+  id               String    @id @default(uuid())
+  name             String
+  category         String
+  itemType         ItemType
+  lastUpdated      DateTime  @default(now())
+  nextReminderDate DateTime?
+  createdAt        DateTime  @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  consumable   Consumable?
+  chargeable   Chargeable?
+  expiry       ExpiryItem?
+  subscription Subscription?
+
+  logs ItemLog[]
+}
+
+model Consumable {
+  id           String @id @default(uuid())
+  quantity     Float
+  minThreshold Float
+  unit         String
+
+  itemId String @unique
+  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Chargeable {
+  id              String   @id @default(uuid())
+  lastChargedAt   DateTime
+  chargeCycleDays Int
+
+  itemId String @unique
+  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model ExpiryItem {
+  id               String   @id @default(uuid())
+  expiryDate       DateTime
+  notifyDaysBefore Int
+
+  itemId String @unique
+  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Subscription {
+  id            String   @id @default(uuid())
+  lastRenewedAt DateTime
+  cycleDays     Int
+
+  itemId String @unique
+  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model ItemLog {
+  id             String   @id @default(uuid())
+  action         String
+  quantityChange Float?
+  createdAt      DateTime @default(now())
+
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model PushSubscription {
+  id         String     @id @default(uuid())
+  endpoint   String
+  p256dh     String
+  auth       String
+  deviceType DeviceType
+  createdAt  DateTime   @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
