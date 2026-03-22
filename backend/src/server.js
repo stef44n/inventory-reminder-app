@@ -4,6 +4,8 @@ require("dotenv").config();
 
 const authRoutes = require("./routes/auth/authRoutes");
 const testRoutes = require("./routes/testRoutes");
+const consumableRoutes = require("./routes/consumableRoutes");
+const chargeableRoutes = require("./routes/chargeableRoutes");
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/consumables", consumableRoutes);
+app.use("/api/chargeables", chargeableRoutes);
 
 app.get("/", (req, res) => {
     res.send("Inventory Reminder API Running");
