@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth/authRoutes");
 const testRoutes = require("./routes/testRoutes");
 const consumableRoutes = require("./routes/consumableRoutes");
 const chargeableRoutes = require("./routes/chargeableRoutes");
+const expiryRoutes = require("./routes/expiryRoutes");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/consumables", consumableRoutes);
 app.use("/api/chargeables", chargeableRoutes);
+app.use("/api/expiry", expiryRoutes);
 
 app.get("/", (req, res) => {
     res.send("Inventory Reminder API Running");
