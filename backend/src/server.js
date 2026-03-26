@@ -9,6 +9,7 @@ const chargeableRoutes = require("./routes/chargeableRoutes");
 const expiryRoutes = require("./routes/expiryRoutes");
 const subscriptionRoutes = require("./routes/subscriptionRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const startScheduler = require("./cron/scheduler");
 
 const app = express();
 
@@ -32,3 +33,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+startScheduler();
