@@ -36,4 +36,41 @@ router.post("/subscribe", authMiddleware, async (req, res) => {
     }
 });
 
+const { sendNotification } = require("../services/pushService");
+
+router.get("/test", authMiddleware, async (req, res) => {
+    try {
+        // 1. Get user subscriptions
+        const subscriptions = await prisma.pushSubscription.findMany({
+            where: { userId: req.user.id },
+        });
+
+        if (!subscriptions.length) {
+            return res.status(400).json({ message: "No subscriptions found" });
+        }
+
+        // 2. Send notification to each device
+        for (const sub of subscriptions) {
+            await sendNotification(
+                {
+                    endpoint: sub.endpoint,
+                    keys: {
+                        p256dh: sub.p256dh,
+                        auth: sub.auth,
+                    },
+                },
+                {
+                    title: "🔥 Test Notification",
+                    body: "Your push system is working!",
+                },
+            );
+        }
+
+        res.json({ message: "Notification sent" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error sending notification" });
+    }
+});
+
 module.exports = router;
