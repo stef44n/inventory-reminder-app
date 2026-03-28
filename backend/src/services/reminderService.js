@@ -1,3 +1,4 @@
+const { sendNotification } = require("./pushService");
 const prisma = require("../lib/prisma");
 
 // 🔹 CALCULATE nextReminderDate FOR ONE ITEM
@@ -57,6 +58,29 @@ const updateAllReminders = async () => {
             where: { id: item.id },
             data: { nextReminderDate },
         });
+
+        // 🔔 SEND NOTIFICATION IF DUE
+        if (nextReminderDate && new Date() >= nextReminderDate) {
+            const subscriptions = await prisma.pushSubscription.findMany({
+                where: { userId: item.userId },
+            });
+
+            for (const sub of subscriptions) {
+                await sendNotification(
+                    {
+                        endpoint: sub.endpoint,
+                        keys: {
+                            p256dh: sub.p256dh,
+                            auth: sub.auth,
+                        },
+                    },
+                    {
+                        title: "Reminder",
+                        body: `${item.name} needs attention`,
+                    },
+                );
+            }
+        }
     }
 
     console.log("Reminders updated");
