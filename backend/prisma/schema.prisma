@@ -17,6 +17,7 @@ enum ItemType {
 enum DeviceType {
   MOBILE
   DESKTOP
+  WEB
 }
 
 model User {
@@ -100,7 +101,7 @@ model ItemLog {
 
 model PushSubscription {
   id         String     @id @default(uuid())
-  endpoint   String
+  endpoint   String     @unique
   p256dh     String
   auth       String
   deviceType DeviceType
