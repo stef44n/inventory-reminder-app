@@ -39,6 +39,7 @@ model Item {
   itemType         ItemType
   lastUpdated      DateTime  @default(now())
   nextReminderDate DateTime?
+  lastNotifiedAt   DateTime?
   createdAt        DateTime  @default(now())
 
   userId String
