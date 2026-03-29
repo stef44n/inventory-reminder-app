@@ -8,7 +8,8 @@ const calculateNextReminder = (item) => {
     switch (item.itemType) {
         case "CONSUMABLE":
             if (item.consumable.quantity <= item.consumable.minThreshold) {
-                return now;
+                // 🔥 KEEP EXISTING REMINDER DATE if already set
+                return item.nextReminderDate || now;
             }
             return null;
 
@@ -60,7 +61,13 @@ const updateAllReminders = async () => {
         });
 
         // 🔔 SEND NOTIFICATION IF DUE
-        if (nextReminderDate && new Date() >= nextReminderDate) {
+        const now = new Date();
+
+        if (
+            nextReminderDate &&
+            now >= nextReminderDate &&
+            (!item.lastNotifiedAt || item.lastNotifiedAt < nextReminderDate)
+        ) {
             const subscriptions = await prisma.pushSubscription.findMany({
                 where: { userId: item.userId },
             });
@@ -80,6 +87,13 @@ const updateAllReminders = async () => {
                     },
                 );
             }
+
+            await prisma.item.update({
+                where: { id: item.id },
+                data: {
+                    lastNotifiedAt: now,
+                },
+            });
         }
     }
 
