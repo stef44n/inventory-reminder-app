@@ -17,14 +17,45 @@ export default function Dashboard() {
         fetchDashboard();
     }, []);
 
+    if (!data) return <p style={{ padding: "20px" }}>Loading...</p>;
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+    };
+
     return (
         <div style={{ padding: "20px" }}>
+            <button onClick={handleLogout}>Logout</button>
             <h2>Dashboard</h2>
 
-            {!data ? (
-                <p>Loading...</p>
+            <Section title="⚠️ Low Stock" items={data.lowStock} />
+            <Section title="🔋 Needs Charging" items={data.needsCharging} />
+            <Section title="⏳ Expiring Soon" items={data.expiringSoon} />
+            <Section
+                title="🔁 Subscriptions Due"
+                items={data.dueSubscriptions}
+            />
+        </div>
+    );
+}
+
+// 🔹 Reusable Section Component
+function Section({ title, items }) {
+    return (
+        <div style={{ marginTop: "20px" }}>
+            <h3>{title}</h3>
+
+            {items.length === 0 ? (
+                <p style={{ color: "#777" }}>Nothing here</p>
             ) : (
-                <pre>{JSON.stringify(data, null, 2)}</pre>
+                <ul>
+                    {items.map((item) => (
+                        <li key={item.id}>
+                            <strong>{item.name}</strong>
+                        </li>
+                    ))}
+                </ul>
             )}
         </div>
     );
