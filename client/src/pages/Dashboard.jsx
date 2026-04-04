@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../api/api";
 
@@ -27,7 +28,12 @@ export default function Dashboard() {
     return (
         <div style={{ padding: "20px" }}>
             <button onClick={handleLogout}>Logout</button>
+
             <h2>Dashboard</h2>
+
+            <div style={{ marginBottom: "20px" }}>
+                <Link to="/consumables">Go to Consumables</Link>
+            </div>
 
             <Section title="⚠️ Low Stock" items={data.lowStock} />
             <Section title="🔋 Needs Charging" items={data.needsCharging} />
