@@ -33,6 +33,8 @@ export default function Dashboard() {
 
             <div style={{ marginBottom: "20px" }}>
                 <Link to="/consumables">Go to Consumables</Link>
+                <br />
+                <Link to="/chargeables">Go to Chargeables</Link>
             </div>
 
             <Section title="⚠️ Low Stock" items={data.lowStock} />

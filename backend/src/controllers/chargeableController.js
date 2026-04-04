@@ -127,3 +127,21 @@ exports.deleteChargeable = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+exports.markAsCharged = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const updated = await prisma.chargeable.update({
+            where: { itemId: id },
+            data: {
+                lastChargedAt: new Date(),
+            },
+        });
+
+        res.json(updated);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating charge status" });
+    }
+};

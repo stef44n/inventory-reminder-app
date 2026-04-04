@@ -1,3 +1,4 @@
+const { markAsCharged } = require("../controllers/chargeableController");
 const express = require("express");
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get("/", authMiddleware, getChargeables);
 
 // Update
 router.put("/:id", authMiddleware, updateChargeable);
-
+router.put("/:id/charge", authMiddleware, markAsCharged);
 // Delete
 router.delete("/:id", authMiddleware, deleteChargeable);
 
