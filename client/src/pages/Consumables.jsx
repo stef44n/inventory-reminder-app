@@ -7,6 +7,8 @@ export default function Consumables() {
     const [quantity, setQuantity] = useState("");
     const [minThreshold, setMinThreshold] = useState("");
     const [unit, setUnit] = useState("");
+    const [editingItemId, setEditingItemId] = useState(null);
+    const [editQuantity, setEditQuantity] = useState("");
 
     const fetchItems = async () => {
         try {
@@ -51,6 +53,20 @@ export default function Consumables() {
             fetchItems();
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    const handleUpdate = async (id) => {
+        try {
+            await API.put(`/consumables/${id}`, {
+                quantity: Number(editQuantity),
+            });
+
+            setEditingItemId(null);
+            fetchItems();
+        } catch (err) {
+            console.error(err);
+            alert("Error updating item");
         }
     };
 
@@ -105,9 +121,32 @@ export default function Consumables() {
                     <li key={item.id}>
                         <strong>{item.name}</strong> —{" "}
                         {item.consumable.quantity} {item.consumable.unit}
+                        <button
+                            onClick={() => {
+                                setEditingItemId(item.id);
+                                setEditQuantity(item.consumable.quantity);
+                            }}
+                        >
+                            Edit
+                        </button>
                         <button onClick={() => handleDelete(item.id)}>
                             Delete
                         </button>
+                        {editingItemId === item.id && (
+                            <div>
+                                <input
+                                    type="number"
+                                    value={editQuantity}
+                                    onChange={(e) =>
+                                        setEditQuantity(e.target.value)
+                                    }
+                                />
+
+                                <button onClick={() => handleUpdate(item.id)}>
+                                    Save
+                                </button>
+                            </div>
+                        )}
                     </li>
                 ))}
             </ul>
