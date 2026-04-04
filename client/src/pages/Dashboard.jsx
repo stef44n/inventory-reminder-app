@@ -35,6 +35,8 @@ export default function Dashboard() {
                 <Link to="/consumables">Go to Consumables</Link>
                 <br />
                 <Link to="/chargeables">Go to Chargeables</Link>
+                <br />
+                <Link to="/expiry">Go to Expiry Items</Link>
             </div>
 
             <Section title="⚠️ Low Stock" items={data.lowStock} />

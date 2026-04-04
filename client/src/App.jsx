@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Consumables from "./pages/Consumables";
 import Chargeables from "./pages/Chargeables";
+import Expiry from "./pages/Expiry";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/consumables" element={<Consumables />} />
                 <Route path="/chargeables" element={<Chargeables />} />
+                <Route path="/expiry" element={<Expiry />} />
             </Routes>
         </BrowserRouter>
     );
