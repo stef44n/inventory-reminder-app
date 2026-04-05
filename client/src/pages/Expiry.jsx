@@ -52,54 +52,60 @@ export default function Expiry() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="container">
             <h2>Expiry Items</h2>
 
             {/* Add Form */}
             <form onSubmit={handleAdd}>
-                <input
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <br />
-                <br />
+                <div className="card">
+                    <input
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <input
-                    type="date"
-                    value={expiryDate}
-                    onChange={(e) => setExpiryDate(e.target.value)}
-                />
-                <br />
-                <br />
+                    <input
+                        type="date"
+                        value={expiryDate}
+                        onChange={(e) => setExpiryDate(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <input
-                    type="number"
-                    placeholder="Notify X days before"
-                    value={notifyDaysBefore}
-                    onChange={(e) => setNotifyDaysBefore(e.target.value)}
-                />
-                <br />
-                <br />
+                    <input
+                        type="number"
+                        placeholder="Notify X days before"
+                        value={notifyDaysBefore}
+                        onChange={(e) => setNotifyDaysBefore(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <button type="submit">Add</button>
+                    <button type="submit">Add</button>
+                </div>
             </form>
 
             <hr />
 
             {/* List */}
-            <ul>
-                {items.map((item) => (
-                    <li key={item.id}>
-                        <strong>{item.name}</strong> —
+
+            {items.map((item) => (
+                <div className="card" key={item.id}>
+                    <strong>{item.name}</strong>
+                    <p>
                         {new Date(item.expiry.expiryDate).toLocaleDateString()}
                         (Notify {item.expiry.notifyDaysBefore} days before)
-                        <button onClick={() => handleDelete(item.id)}>
-                            Delete
-                        </button>
-                    </li>
-                ))}
-            </ul>
+                    </p>
+                    <button
+                        className="button-small"
+                        onClick={() => handleDelete(item.id)}
+                    >
+                        Delete
+                    </button>
+                </div>
+            ))}
         </div>
     );
 }

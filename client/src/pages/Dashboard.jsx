@@ -45,7 +45,7 @@ export default function Dashboard() {
 // 🔹 Reusable Section Component
 function Section({ title, items }) {
     return (
-        <div style={{ marginTop: "20px" }}>
+        <div className="container">
             <h3>{title}</h3>
 
             {items.length === 0 ? (

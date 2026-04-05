@@ -58,49 +58,57 @@ export default function Subscriptions() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="container">
             <h2>Subscriptions</h2>
 
             {/* Add Form */}
             <form onSubmit={handleAdd}>
-                <input
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <br />
-                <br />
+                <div className="card">
+                    <input
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <input
-                    type="number"
-                    placeholder="Cycle (days)"
-                    value={cycleDays}
-                    onChange={(e) => setCycleDays(e.target.value)}
-                />
-                <br />
-                <br />
+                    <input
+                        type="number"
+                        placeholder="Cycle (days)"
+                        value={cycleDays}
+                        onChange={(e) => setCycleDays(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <button type="submit">Add</button>
+                    <button type="submit">Add</button>
+                </div>
             </form>
 
             <hr />
 
             {/* List */}
-            <ul>
-                {items.map((item) => (
-                    <li key={item.id}>
-                        <strong>{item.name}</strong>
 
-                        <button onClick={() => handleRenew(item.id)}>
-                            Renew
-                        </button>
+            {items.map((item) => (
+                <div className="card" key={item.id}>
+                    <strong>{item.name}</strong>
+                    <p></p>
 
-                        <button onClick={() => handleDelete(item.id)}>
-                            Delete
-                        </button>
-                    </li>
-                ))}
-            </ul>
+                    <button
+                        className="button-small"
+                        onClick={() => handleRenew(item.id)}
+                    >
+                        Renew
+                    </button>
+
+                    <button
+                        className="button-small"
+                        onClick={() => handleDelete(item.id)}
+                    >
+                        Delete
+                    </button>
+                </div>
+            ))}
         </div>
     );
 }

@@ -71,85 +71,97 @@ export default function Consumables() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="container">
             <h2>Consumables</h2>
 
             {/* Add Form */}
             <form onSubmit={handleAdd}>
-                <input
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <br />
-                <br />
+                <div className="card">
+                    <input
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <input
-                    type="number"
-                    placeholder="Quantity"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                />
-                <br />
-                <br />
+                    <input
+                        type="number"
+                        placeholder="Quantity"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <input
-                    type="number"
-                    placeholder="Min Threshold"
-                    value={minThreshold}
-                    onChange={(e) => setMinThreshold(e.target.value)}
-                />
-                <br />
-                <br />
+                    <input
+                        type="number"
+                        placeholder="Min Threshold"
+                        value={minThreshold}
+                        onChange={(e) => setMinThreshold(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <input
-                    placeholder="Unit (e.g. kg, litres, units)"
-                    value={unit}
-                    onChange={(e) => setUnit(e.target.value)}
-                />
-                <br />
-                <br />
+                    <input
+                        placeholder="Unit (e.g. kg, litres, units)"
+                        value={unit}
+                        onChange={(e) => setUnit(e.target.value)}
+                    />
+                    <br />
+                    <br />
 
-                <button type="submit">Add</button>
+                    <button type="submit">Add</button>
+                </div>
             </form>
 
             <hr />
 
             {/* List */}
-            <ul>
-                {items.map((item) => (
-                    <li key={item.id}>
-                        <strong>{item.name}</strong> —{" "}
+            {items.map((item) => (
+                <div className="card" key={item.id}>
+                    <strong>{item.name}</strong>
+                    <p>
                         {item.consumable.quantity} {item.consumable.unit}
-                        <button
-                            onClick={() => {
-                                setEditingItemId(item.id);
-                                setEditQuantity(item.consumable.quantity);
-                            }}
-                        >
-                            Edit
-                        </button>
-                        <button onClick={() => handleDelete(item.id)}>
-                            Delete
-                        </button>
-                        {editingItemId === item.id && (
-                            <div>
-                                <input
-                                    type="number"
-                                    value={editQuantity}
-                                    onChange={(e) =>
-                                        setEditQuantity(e.target.value)
-                                    }
-                                />
+                    </p>
 
-                                <button onClick={() => handleUpdate(item.id)}>
-                                    Save
-                                </button>
-                            </div>
-                        )}
-                    </li>
-                ))}
-            </ul>
+                    <button
+                        className="button-small"
+                        onClick={() => {
+                            setEditingItemId(item.id);
+                            setEditQuantity(item.consumable.quantity);
+                        }}
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        className="button-small"
+                        onClick={() => handleDelete(item.id)}
+                    >
+                        Delete
+                    </button>
+
+                    {editingItemId === item.id && (
+                        <div style={{ marginTop: "10px" }}>
+                            <input
+                                type="number"
+                                value={editQuantity}
+                                onChange={(e) =>
+                                    setEditQuantity(e.target.value)
+                                }
+                            />
+
+                            <button
+                                className="button-small"
+                                onClick={() => handleUpdate(item.id)}
+                            >
+                                Save
+                            </button>
+                        </div>
+                    )}
+                </div>
+            ))}
         </div>
     );
 }
