@@ -127,3 +127,21 @@ exports.deleteSubscription = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+exports.renewSubscription = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const updated = await prisma.subscription.update({
+            where: { itemId: id },
+            data: {
+                lastRenewedAt: new Date(),
+            },
+        });
+
+        res.json(updated);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error renewing subscription" });
+    }
+};
