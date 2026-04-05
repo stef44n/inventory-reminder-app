@@ -31,16 +31,6 @@ export default function Dashboard() {
 
             <h2>Dashboard</h2>
 
-            <div style={{ marginBottom: "20px" }}>
-                <Link to="/consumables">Go to Consumables</Link>
-                <br />
-                <Link to="/chargeables">Go to Chargeables</Link>
-                <br />
-                <Link to="/expiry">Go to Expiry Items</Link>
-                <br />
-                <Link to="/subscriptions">Go to Subscriptions</Link>
-            </div>
-
             <Section title="⚠️ Low Stock" items={data.lowStock} />
             <Section title="🔋 Needs Charging" items={data.needsCharging} />
             <Section title="⏳ Expiring Soon" items={data.expiringSoon} />

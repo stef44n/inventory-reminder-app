@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -12,13 +13,16 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route element={<Layout />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/consumables" element={<Consumables />} />
+                    <Route path="/chargeables" element={<Chargeables />} />
+                    <Route path="/expiry" element={<Expiry />} />
+                    <Route path="/subscriptions" element={<Subscriptions />} />
+                </Route>
+
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/consumables" element={<Consumables />} />
-                <Route path="/chargeables" element={<Chargeables />} />
-                <Route path="/expiry" element={<Expiry />} />
-                <Route path="/subscriptions" element={<Subscriptions />} />
             </Routes>
         </BrowserRouter>
     );
