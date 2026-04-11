@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { subscribeToPush } from "../utils/push";
 import { useEffect, useState } from "react";
 import API from "../api/api";
 
@@ -30,6 +31,8 @@ export default function Dashboard() {
             <button onClick={handleLogout}>Logout</button>
 
             <h2>Dashboard</h2>
+
+            <button onClick={subscribeToPush}>Enable Notifications</button>
 
             <Section title="⚠️ Low Stock" items={data.lowStock} />
             <Section title="🔋 Needs Charging" items={data.needsCharging} />
