@@ -71,8 +71,11 @@ const updateAllReminders = async () => {
             const subscriptions = await prisma.pushSubscription.findMany({
                 where: { userId: item.userId },
             });
+            // console.log("ITEM USER:", item.userId);
+            // console.log("Subscriptions found:", subscriptions.length);
 
             for (const sub of subscriptions) {
+                // console.log("Item:", item.name, "User:", item.userId);
                 await sendNotification(
                     {
                         endpoint: sub.endpoint,
@@ -85,6 +88,7 @@ const updateAllReminders = async () => {
                         title: "Reminder",
                         body: `${item.name} needs attention`,
                     },
+                    // console.log("Sending to endpoint:", sub.endpoint),
                 );
             }
 
