@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://inventory-reminder-backend.onrender.com",
+    baseURL: "https://inventory-reminder-backend.onrender.com/api",
 });
 
 // Attach token automatically
