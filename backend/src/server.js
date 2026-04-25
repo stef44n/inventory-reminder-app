@@ -14,7 +14,15 @@ const pushRoutes = require("./routes/pushRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(
+    cors({
+        origin: [
+            "http://localhost:5173",
+            "https://inventory-reminder-frontend.onrender.com",
+        ],
+        credentials: true,
+    }),
+);
 app.use(express.json());
 app.use(express.static("public"));
 

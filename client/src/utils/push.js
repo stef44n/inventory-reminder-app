@@ -1,4 +1,5 @@
-const publicKey = "vapid_public_key"; // 🔥 vapid_public_key
+const publicKey =
+    "BB9ZlF2d-bOcWhlXHXr7CgczEDAReP0h47-bAsVIa-tRU8XDBkXsImASJkjo1VlIKGllPahSgklejgzP829dFVI"; // 🔥 vapid_public_key
 
 function urlBase64ToUint8Array(base64String) {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -28,14 +29,17 @@ export async function subscribeToPush() {
     });
     console.log(subscription.endpoint);
 
-    await fetch("http://localhost:5000/api/push/subscribe", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+    await fetch(
+        "https://inventory-reminder-backend.onrender.com/api/push/subscribe",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(subscription),
         },
-        body: JSON.stringify(subscription),
-    });
+    );
 
     alert("Notifications enabled!");
 }
