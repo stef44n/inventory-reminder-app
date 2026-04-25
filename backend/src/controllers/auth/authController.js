@@ -48,6 +48,7 @@ exports.registerUser = async (req, res) => {
         // 8. Send response
         res.status(201).json({
             message: "User registered. Check console for verification link.",
+            verificationToken: user.verificationToken, //
         });
     } catch (error) {
         console.error(error);
