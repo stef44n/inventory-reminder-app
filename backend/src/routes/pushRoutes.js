@@ -17,6 +17,10 @@ router.post("/subscribe", authMiddleware, async (req, res) => {
                 .json({ message: "Invalid subscription object" });
         }
 
+        await prisma.pushSubscription.deleteMany({
+            where: { userId: req.user.id },
+        });
+
         await prisma.pushSubscription.upsert({
             where: { endpoint },
             update: {},
