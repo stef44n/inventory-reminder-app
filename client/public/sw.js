@@ -1,28 +1,25 @@
 self.addEventListener("install", (event) => {
+    console.log("SW installing...");
     self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
+    console.log("SW activated");
     event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener("notificationclick", function (event) {
-    event.notification.close();
-    event.waitUntil(self.clients.openWindow("/dashboard"));
-});
-
-self.addEventListener("install", (event) => {
-    console.log("Service Worker installing...");
-});
-
-self.addEventListener("fetch", (event) => {
-    // basic pass-through for now
 });
 
 self.addEventListener("push", function (event) {
     const data = event.data.json();
 
-    self.registration.showNotification(data.title, {
-        body: data.body,
-    });
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+        }),
+    );
+});
+
+self.addEventListener("notificationclick", function (event) {
+    event.notification.close();
+
+    event.waitUntil(clients.openWindow("/dashboard"));
 });
