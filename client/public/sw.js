@@ -6,6 +6,11 @@ self.addEventListener("activate", (event) => {
     event.waitUntil(self.clients.claim());
 });
 
+self.addEventListener("notificationclick", function (event) {
+    event.notification.close();
+    event.waitUntil(self.clients.openWindow("/dashboard"));
+});
+
 self.addEventListener("install", (event) => {
     console.log("Service Worker installing...");
 });
