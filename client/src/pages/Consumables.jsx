@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
+import Card from "../components/Card";
+import Header from "../components/Header";
 
 export default function Consumables() {
     const [items, setItems] = useState([]);
@@ -72,7 +74,7 @@ export default function Consumables() {
 
     return (
         <div className="container">
-            <h2>Consumables</h2>
+            <Header title="Consumables" />
 
             {/* Add Form */}
             <form onSubmit={handleAdd}>
@@ -111,57 +113,107 @@ export default function Consumables() {
                     <br />
                     <br />
 
-                    <button type="submit">Add</button>
+                    <button type="submit" className="button-primary">
+                        Add
+                    </button>
                 </div>
             </form>
 
-            <hr />
+            <hr className="divider" />
 
             {/* List */}
-            {items.map((item) => (
-                <div className="card" key={item.id}>
-                    <strong>{item.name}</strong>
-                    <p>
-                        {item.consumable.quantity} {item.consumable.unit}
-                    </p>
+            {items.length === 0 ? (
+                <p className="empty-text">No items yet</p>
+            ) : (
+                items.map((item) => {
+                    const isLow =
+                        item.consumable.quantity <=
+                        item.consumable.minThreshold;
 
-                    <button
-                        className="button-small"
-                        onClick={() => {
-                            setEditingItemId(item.id);
-                            setEditQuantity(item.consumable.quantity);
-                        }}
-                    >
-                        Edit
-                    </button>
+                    return (
+                        <Card key={item.id}>
+                            <div className="card-row">
+                                {/* LEFT */}
+                                <div className="card-left">
+                                    <span className="card-title">
+                                        {item.name}
+                                    </span>
 
-                    <button
-                        className="button-small"
-                        onClick={() => handleDelete(item.id)}
-                    >
-                        Delete
-                    </button>
+                                    <span className="card-subtext">
+                                        {item.consumable.quantity}{" "}
+                                        {item.consumable.unit}
+                                    </span>
 
-                    {editingItemId === item.id && (
-                        <div style={{ marginTop: "10px" }}>
-                            <input
-                                type="number"
-                                value={editQuantity}
-                                onChange={(e) =>
-                                    setEditQuantity(e.target.value)
-                                }
-                            />
+                                    <span className="card-subtext">
+                                        Min: {item.consumable.minThreshold}{" "}
+                                        {item.consumable.unit}
+                                    </span>
+                                </div>
 
-                            <button
-                                className="button-small"
-                                onClick={() => handleUpdate(item.id)}
-                            >
-                                Save
-                            </button>
-                        </div>
-                    )}
-                </div>
-            ))}
+                                {/* RIGHT */}
+                                <div className="card-right">
+                                    {/* STATUS */}
+                                    <div
+                                        className={`status ${
+                                            isLow ? "status-due" : "status-ok"
+                                        }`}
+                                    >
+                                        {isLow ? "Low" : "OK"}
+                                    </div>
+
+                                    {/* ACTIONS */}
+                                    <div className="card-actions">
+                                        <button
+                                            className="button-small"
+                                            onClick={() => {
+                                                setEditingItemId(item.id);
+                                                setEditQuantity(
+                                                    item.consumable.quantity,
+                                                );
+                                            }}
+                                        >
+                                            Edit
+                                        </button>
+
+                                        <button
+                                            className="button-small"
+                                            onClick={() =>
+                                                handleDelete(item.id)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+
+                                    {/* EDIT SECTION */}
+                                    {editingItemId === item.id && (
+                                        <div className="edit-section">
+                                            <input
+                                                type="number"
+                                                value={editQuantity}
+                                                onChange={(e) =>
+                                                    setEditQuantity(
+                                                        e.target.value,
+                                                    )
+                                                }
+                                            />
+
+                                            <button
+                                                className="button-small"
+                                                onClick={() =>
+                                                    handleUpdate(item.id)
+                                                }
+                                            >
+                                                Save
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </Card>
+                    );
+                })
+            )}
         </div>
     );
 }
