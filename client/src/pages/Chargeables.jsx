@@ -90,61 +90,70 @@ export default function Chargeables() {
 
             {/* List */}
 
-            {items.map((item) => {
-                const lastCharged = new Date(item.chargeable.lastChargedAt);
-                const nextCharge = new Date(lastCharged);
-                nextCharge.setDate(
-                    nextCharge.getDate() + item.chargeable.chargeCycleDays,
-                );
+            {items.length === 0 ? (
+                <p className="empty-text">No items yet</p>
+            ) : (
+                items.map((item) => {
+                    const lastCharged = new Date(item.chargeable.lastChargedAt);
+                    const nextCharge = new Date(lastCharged);
+                    nextCharge.setDate(
+                        nextCharge.getDate() + item.chargeable.chargeCycleDays,
+                    );
 
-                const now = new Date();
-                const isDue = now >= nextCharge;
+                    const now = new Date();
+                    const isDue = now >= nextCharge;
 
-                return (
-                    <div className="card" key={item.id}>
-                        <div className="card-row">
-                            {/* LEFT */}
-                            <div className="card-left">
-                                <span className="card-title">{item.name}</span>
-                                <span className="card-subtext">
-                                    Every {item.chargeable.chargeCycleDays} days
-                                </span>
-                            </div>
-
-                            {/* RIGHT */}
-                            <div className="card-right">
-                                {/* STATUS */}
-                                <div
-                                    className={`status ${
-                                        isDue ? "status-due" : "status-ok"
-                                    }`}
-                                >
-                                    {isDue ? "Due" : "OK"}
+                    return (
+                        <div className="card" key={item.id}>
+                            <div className="card-row">
+                                {/* LEFT */}
+                                <div className="card-left">
+                                    <span className="card-title">
+                                        {item.name}
+                                    </span>
+                                    <span className="card-subtext">
+                                        Every {item.chargeable.chargeCycleDays}{" "}
+                                        days
+                                    </span>
                                 </div>
 
-                                {/* ACTIONS */}
-                                <div className="card-actions">
-                                    <button
-                                        className="button-small"
-                                        onClick={() =>
-                                            handleMarkCharged(item.id)
-                                        }
+                                {/* RIGHT */}
+                                <div className="card-right">
+                                    {/* STATUS */}
+                                    <div
+                                        className={`status ${
+                                            isDue ? "status-due" : "status-ok"
+                                        }`}
                                     >
-                                        Charged
-                                    </button>
+                                        {isDue ? "Due" : "OK"}
+                                    </div>
 
-                                    <button
-                                        className="button-small"
-                                        onClick={() => handleDelete(item.id)}
-                                    >
-                                        Delete
-                                    </button>
+                                    {/* ACTIONS */}
+                                    <div className="card-actions">
+                                        <button
+                                            className="button-small"
+                                            onClick={() =>
+                                                handleMarkCharged(item.id)
+                                            }
+                                        >
+                                            Charged
+                                        </button>
+
+                                        <button
+                                            className="button-small"
+                                            onClick={() =>
+                                                handleDelete(item.id)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                );
-            })}
+                    );
+                })
+            )}
         </div>
     );
 }
