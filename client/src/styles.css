@@ -53,3 +53,104 @@ h2 {
     font-size: 12px;
     margin-left: 5px;
 }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+button {
+    font-family: inherit;
+}
+
+/* Card layout */
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.card-subtext {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Right side */
+.card-right {
+    text-align: right;
+}
+
+/* Status */
+.status {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.status-ok {
+    color: #10b981;
+}
+
+.status-due {
+    color: #ef4444;
+}
+
+/* Actions */
+.card-actions {
+    margin-top: 6px;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+/* Form button (primary) */
+.button-primary {
+    background: #2563eb;
+    color: white;
+    font-weight: bold;
+}
+
+.button-primary:hover {
+    background: #1d4ed8;
+}
+
+/* Empty state */
+.empty-text {
+    text-align: center;
+    color: #9ca3af;
+}
+
+/* Edit section */
+.edit-section {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+/* Divider */
+.divider {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Expiry specific */
+.status-expired {
+    color: #dc2626;
+}
+
+.status-soon {
+    color: #f59e0b;
+}
