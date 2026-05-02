@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
+import Card from "../components/Card";
+import Header from "../components/Header";
 
 export default function Subscriptions() {
     const [items, setItems] = useState([]);
@@ -59,7 +61,7 @@ export default function Subscriptions() {
 
     return (
         <div className="container">
-            <h2>Subscriptions</h2>
+            <Header title="Subscriptions" />
 
             {/* Add Form */}
             <form onSubmit={handleAdd}>
@@ -81,34 +83,110 @@ export default function Subscriptions() {
                     <br />
                     <br />
 
-                    <button type="submit">Add</button>
+                    <button type="submit" className="button-primary">
+                        Add
+                    </button>
                 </div>
             </form>
 
-            <hr />
+            <hr className="divider" />
 
             {/* List */}
 
-            {items.map((item) => (
-                <div className="card" key={item.id}>
-                    <strong>{item.name}</strong>
-                    <p></p>
+            {items.length === 0 ? (
+                <p className="empty-text">No subscriptions yet</p>
+            ) : (
+                items.map((item) => (
+                    <Card key={item.id}>
+                        {(() => {
+                            const lastRenewed = new Date(
+                                item.subscription.lastRenewedAt,
+                            );
+                            const nextRenewal = new Date(lastRenewed);
+                            nextRenewal.setDate(
+                                nextRenewal.getDate() +
+                                    item.subscription.cycleDays,
+                            );
 
-                    <button
-                        className="button-small"
-                        onClick={() => handleRenew(item.id)}
-                    >
-                        Renew
-                    </button>
+                            const now = new Date();
+                            const diffTime = nextRenewal - now;
+                            const diffDays = Math.ceil(
+                                diffTime / (1000 * 60 * 60 * 24),
+                            );
 
-                    <button
-                        className="button-small"
-                        onClick={() => handleDelete(item.id)}
-                    >
-                        Delete
-                    </button>
-                </div>
-            ))}
+                            let statusText = "OK";
+                            let statusClass = "status-ok";
+
+                            if (diffDays < 0) {
+                                statusText = "Due";
+                                statusClass = "status-due";
+                            } else if (diffDays <= 2) {
+                                statusText = "Soon";
+                                statusClass = "status-soon";
+                            }
+
+                            return (
+                                <div className="card-row">
+                                    {/* LEFT */}
+                                    <div className="card-left">
+                                        <span className="card-title">
+                                            {item.name}
+                                        </span>
+
+                                        <span className="card-subtext">
+                                            Every {item.subscription.cycleDays}{" "}
+                                            days
+                                        </span>
+
+                                        <span className="card-subtext">
+                                            {diffDays >= 0
+                                                ? `${diffDays} day${
+                                                      diffDays !== 1 ? "s" : ""
+                                                  } until renewal`
+                                                : `${Math.abs(diffDays)} day${
+                                                      Math.abs(diffDays) !== 1
+                                                          ? "s"
+                                                          : ""
+                                                  } overdue`}
+                                        </span>
+                                    </div>
+
+                                    {/* RIGHT */}
+                                    <div className="card-right">
+                                        {/* STATUS */}
+                                        <div
+                                            className={`status ${statusClass}`}
+                                        >
+                                            {statusText}
+                                        </div>
+
+                                        {/* ACTIONS */}
+                                        <div className="card-actions">
+                                            <button
+                                                className="button-small"
+                                                onClick={() =>
+                                                    handleRenew(item.id)
+                                                }
+                                            >
+                                                Renew
+                                            </button>
+
+                                            <button
+                                                className="button-small"
+                                                onClick={() =>
+                                                    handleDelete(item.id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })()}
+                    </Card>
+                ))
+            )}
         </div>
     );
 }

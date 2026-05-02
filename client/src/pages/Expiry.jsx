@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
+import Header from "../components/Header";
+import Card from "../components/Card";
 
 export default function Expiry() {
     const [items, setItems] = useState([]);
@@ -53,7 +55,7 @@ export default function Expiry() {
 
     return (
         <div className="container">
-            <h2>Expiry Items</h2>
+            <Header title="Expiry Items" />
 
             {/* Add Form */}
             <form onSubmit={handleAdd}>
@@ -83,29 +85,90 @@ export default function Expiry() {
                     <br />
                     <br />
 
-                    <button type="submit">Add</button>
+                    <button type="submit" className="button-primary">
+                        Add
+                    </button>
                 </div>
             </form>
 
-            <hr />
+            <hr className="divider" />
 
             {/* List */}
 
-            {items.map((item) => (
-                <div className="card" key={item.id}>
-                    <strong>{item.name}</strong>
-                    <p>
-                        {new Date(item.expiry.expiryDate).toLocaleDateString()}
-                        (Notify {item.expiry.notifyDaysBefore} days before)
-                    </p>
-                    <button
-                        className="button-small"
-                        onClick={() => handleDelete(item.id)}
-                    >
-                        Delete
-                    </button>
-                </div>
-            ))}
+            {items.length === 0 ? (
+                <p className="empty-text">No items yet</p>
+            ) : (
+                items.map((item) => {
+                    const expiryDate = new Date(item.expiry.expiryDate);
+                    const now = new Date();
+
+                    const diffTime = expiryDate - now;
+                    const diffDays = Math.ceil(
+                        diffTime / (1000 * 60 * 60 * 24),
+                    );
+
+                    let statusText = "OK";
+                    let statusClass = "status-ok";
+
+                    if (diffDays < 0) {
+                        statusText = "Expired";
+                        statusClass = "status-expired";
+                    } else if (diffDays <= item.expiry.notifyDaysBefore) {
+                        statusText = "Soon";
+                        statusClass = "status-soon";
+                    }
+
+                    return (
+                        <Card key={item.id}>
+                            <div className="card-row">
+                                {/* LEFT */}
+                                <div className="card-left">
+                                    <span className="card-title">
+                                        {item.name}
+                                    </span>
+
+                                    <span className="card-subtext">
+                                        Expires:{" "}
+                                        {expiryDate.toLocaleDateString()}
+                                    </span>
+
+                                    <span className="card-subtext">
+                                        {diffDays >= 0
+                                            ? `${diffDays} day${
+                                                  diffDays !== 1 ? "s" : ""
+                                              } left`
+                                            : `${Math.abs(diffDays)} day${
+                                                  Math.abs(diffDays) !== 1
+                                                      ? "s"
+                                                      : ""
+                                              } overdue`}
+                                    </span>
+                                </div>
+
+                                {/* RIGHT */}
+                                <div className="card-right">
+                                    {/* STATUS */}
+                                    <div className={`status ${statusClass}`}>
+                                        {statusText}
+                                    </div>
+
+                                    {/* ACTIONS */}
+                                    <div className="card-actions">
+                                        <button
+                                            className="button-small"
+                                            onClick={() =>
+                                                handleDelete(item.id)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
+                    );
+                })
+            )}
         </div>
     );
 }
