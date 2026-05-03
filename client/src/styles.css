@@ -154,3 +154,61 @@ button {
 .status-soon {
     color: #f59e0b;
 }
+
+/* Card layout upgrade */
+.card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+/* Icon */
+.card-icon {
+    font-size: 20px;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+/* Content */
+.card-content {
+    flex: 1;
+}
+
+/* Status base */
+.status {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* Variants */
+.status-ok {
+    color: #10b981;
+}
+
+.status-soon {
+    color: #f59e0b;
+}
+
+.status-due {
+    color: #ef4444;
+}
+
+.status-expired {
+    color: #dc2626;
+}
+
+/* Form spacing */
+.card input {
+    margin-bottom: 10px;
+}
+
+/* Primary button */
+.button-primary {
+    width: 100%;
+    background: #2563eb;
+    font-weight: 600;
+}
+
+.button-primary:hover {
+    background: #1d4ed8;
+}

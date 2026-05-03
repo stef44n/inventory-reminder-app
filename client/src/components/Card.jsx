@@ -1,15 +1,8 @@
-export default function Card({ children }) {
+export default function Card({ children, icon }) {
     return (
-        <div
-            style={{
-                background: "#fff",
-                borderRadius: "16px",
-                padding: "16px",
-                marginBottom: "12px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            }}
-        >
-            {children}
+        <div className="card">
+            <div className="card-icon">{icon}</div>
+            <div className="card-content">{children}</div>
         </div>
     );
 }
