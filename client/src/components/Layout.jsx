@@ -2,7 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 export default function Layout() {
     return (
-        <div style={{ paddingBottom: "70px" }}>
+        <div className="page-wrapper">
             {/* Page Content */}
             <Outlet />
 
@@ -25,7 +25,7 @@ export default function Layout() {
                     }
                 >
                     <span className="nav-icon">🧃</span>
-                    Consumables
+                    Goods
                 </NavLink>
 
                 <NavLink

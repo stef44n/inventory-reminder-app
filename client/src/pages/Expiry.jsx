@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 import Header from "../components/Header";
 import Card from "../components/Card";
+import toast from "react-hot-toast";
 
 export default function Expiry() {
     const [items, setItems] = useState([]);
@@ -38,9 +39,10 @@ export default function Expiry() {
             setNotifyDaysBefore("");
 
             fetchItems();
+            toast.success("Item added");
         } catch (err) {
             console.error(err);
-            alert("Error adding item");
+            toast.error("Error adding item");
         }
     };
 

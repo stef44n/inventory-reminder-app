@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 import Card from "../components/Card";
 import Header from "../components/Header";
+import toast from "react-hot-toast";
 
 export default function Consumables() {
     const [items, setItems] = useState([]);
@@ -43,9 +44,10 @@ export default function Consumables() {
             setUnit("");
 
             fetchItems();
+            toast.success("Item added");
         } catch (err) {
             console.error(err);
-            alert("Error adding item");
+            toast.error("Error adding item");
         }
     };
 
@@ -68,7 +70,7 @@ export default function Consumables() {
             fetchItems();
         } catch (err) {
             console.error(err);
-            alert("Error updating item");
+            toast.error("Error updating item");
         }
     };
 

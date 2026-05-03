@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 import Card from "../components/Card";
 import Header from "../components/Header";
+import toast from "react-hot-toast";
 
 export default function Subscriptions() {
     const [items, setItems] = useState([]);
@@ -35,9 +36,10 @@ export default function Subscriptions() {
             setCycleDays("");
 
             fetchItems();
+            toast.success("Item added");
         } catch (err) {
             console.error(err);
-            alert("Error adding subscription");
+            toast.error("Error adding subscription");
         }
     };
 
@@ -54,6 +56,7 @@ export default function Subscriptions() {
         try {
             await API.put(`/subscriptions/${id}/renew`);
             fetchItems();
+            toast.success("Subscription renewed");
         } catch (err) {
             console.error(err);
         }
