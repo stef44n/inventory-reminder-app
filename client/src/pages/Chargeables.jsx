@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/api";
 import Header from "../components/Header";
+import Card from "../components/Card";
 
 export default function Chargeables() {
     const [items, setItems] = useState([]);
@@ -104,7 +105,7 @@ export default function Chargeables() {
                     const isDue = now >= nextCharge;
 
                     return (
-                        <div className="card" key={item.id}>
+                        <Card key={item.id} icon="🔋">
                             <div className="card-row">
                                 {/* LEFT */}
                                 <div className="card-left">
@@ -150,7 +151,7 @@ export default function Chargeables() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Card>
                     );
                 })
             )}

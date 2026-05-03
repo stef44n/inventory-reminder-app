@@ -97,7 +97,7 @@ export default function Subscriptions() {
                 <p className="empty-text">No subscriptions yet</p>
             ) : (
                 items.map((item) => (
-                    <Card key={item.id}>
+                    <Card key={item.id} icon="💳">
                         {(() => {
                             const lastRenewed = new Date(
                                 item.subscription.lastRenewedAt,

@@ -131,7 +131,7 @@ export default function Consumables() {
                         item.consumable.minThreshold;
 
                     return (
-                        <Card key={item.id}>
+                        <Card key={item.id} icon="🧃">
                             <div className="card-row">
                                 {/* LEFT */}
                                 <div className="card-left">
