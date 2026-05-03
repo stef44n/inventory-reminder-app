@@ -7,7 +7,7 @@
     "theme_color": "#8f2424",
     "icons": [
         {
-            "src": "/icon-192.png",
+            "src": "/planning.png",
             "sizes": "192x192",
             "type": "image/png"
         },
