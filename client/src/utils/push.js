@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 const publicKey =
     "BB9ZlF2d-bOcWhlXHXr7CgczEDAReP0h47-bAsVIa-tRU8XDBkXsImASJkjo1VlIKGllPahSgklejgzP829dFVI"; // 🔥 vapid_public_key
 
@@ -41,5 +43,5 @@ export async function subscribeToPush() {
         },
     );
 
-    alert("Notifications enabled!");
+    toast.success("Notifications enabled!");
 }

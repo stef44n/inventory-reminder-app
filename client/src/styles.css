@@ -323,3 +323,54 @@ button {
 .nav-item:active {
     transform: scale(0.95);
 }
+
+/* Smooth transitions everywhere */
+* {
+    transition: all 0.15s ease;
+}
+
+/* Button press feedback */
+button:active {
+    transform: scale(0.97);
+}
+
+/* Card hover / tap */
+.card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:active {
+    transform: scale(0.98);
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Page wrapper */
+.page-wrapper {
+    padding-bottom: 70px;
+}
+
+/* Fade animation */
+.page-wrapper {
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.empty-text {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    margin-top: 20px;
+}
