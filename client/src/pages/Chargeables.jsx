@@ -83,7 +83,9 @@ export default function Chargeables() {
                     <br />
                     <br />
 
-                    <button type="submit">Add</button>
+                    <button type="submit" className="button-primary">
+                        Add
+                    </button>
                 </div>
             </form>
 

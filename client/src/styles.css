@@ -212,3 +212,69 @@ button {
 .button-primary:hover {
     background: #1d4ed8;
 }
+
+/* Dashboard */
+.dashboard {
+    padding: 16px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.dashboard-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Summary cards */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.summary-card {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.summary-number {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.summary-label {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Section spacing */
+.dashboard-section {
+    margin-bottom: 20px;
+}
+
+/* Links grid */
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.link-card {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
