@@ -8,6 +8,7 @@ export default function Subscriptions() {
     const [items, setItems] = useState([]);
     const [name, setName] = useState("");
     const [cycleDays, setCycleDays] = useState("");
+    const [showForm, setShowForm] = useState(false);
 
     const fetchItems = async () => {
         try {
@@ -34,6 +35,7 @@ export default function Subscriptions() {
 
             setName("");
             setCycleDays("");
+            setShowForm(false);
 
             fetchItems();
             toast.success("Item added");
@@ -47,6 +49,7 @@ export default function Subscriptions() {
         try {
             await API.delete(`/subscriptions/${id}`);
             fetchItems();
+            toast.success("Item deleted");
         } catch (err) {
             console.error(err);
         }
@@ -67,30 +70,39 @@ export default function Subscriptions() {
             <Header title="Subscriptions" />
 
             {/* Add Form */}
-            <form onSubmit={handleAdd}>
-                <div className="card">
-                    <input
-                        placeholder="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <br />
-                    <br />
+            <button
+                className="button-primary"
+                onClick={() => setShowForm(!showForm)}
+            >
+                {showForm ? "Cancel" : "Add New Item"}
+            </button>
 
-                    <input
-                        type="number"
-                        placeholder="Cycle (days)"
-                        value={cycleDays}
-                        onChange={(e) => setCycleDays(e.target.value)}
-                    />
-                    <br />
-                    <br />
+            {showForm && (
+                <form onSubmit={handleAdd}>
+                    <div className="card">
+                        <input
+                            placeholder="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <br />
+                        <br />
 
-                    <button type="submit" className="button-primary">
-                        Add
-                    </button>
-                </div>
-            </form>
+                        <input
+                            type="number"
+                            placeholder="Cycle (days)"
+                            value={cycleDays}
+                            onChange={(e) => setCycleDays(e.target.value)}
+                        />
+                        <br />
+                        <br />
+
+                        <button type="submit" className="button-primary">
+                            Add
+                        </button>
+                    </div>
+                </form>
+            )}
 
             <hr className="divider" />
 

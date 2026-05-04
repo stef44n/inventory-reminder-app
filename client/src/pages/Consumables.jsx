@@ -12,6 +12,7 @@ export default function Consumables() {
     const [unit, setUnit] = useState("");
     const [editingItemId, setEditingItemId] = useState(null);
     const [editQuantity, setEditQuantity] = useState("");
+    const [showForm, setShowForm] = useState(false);
 
     const fetchItems = async () => {
         try {
@@ -42,6 +43,7 @@ export default function Consumables() {
             setQuantity("");
             setMinThreshold("");
             setUnit("");
+            setShowForm(false);
 
             fetchItems();
             toast.success("Item added");
@@ -55,6 +57,7 @@ export default function Consumables() {
         try {
             await API.delete(`/consumables/${id}`);
             fetchItems();
+            toast.success("Item deleted");
         } catch (err) {
             console.error(err);
         }
@@ -68,6 +71,7 @@ export default function Consumables() {
 
             setEditingItemId(null);
             fetchItems();
+            toast.success("Item updated");
         } catch (err) {
             console.error(err);
             toast.error("Error updating item");
@@ -79,47 +83,50 @@ export default function Consumables() {
             <Header title="Consumables" />
 
             {/* Add Form */}
-            <form onSubmit={handleAdd}>
-                <div className="card">
-                    <input
-                        placeholder="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <br />
-                    <br />
+            {/* ADD BUTTON */}
+            <button
+                className="button-primary"
+                onClick={() => setShowForm(!showForm)}
+            >
+                {showForm ? "Cancel" : "Add New Item"}
+            </button>
 
-                    <input
-                        type="number"
-                        placeholder="Quantity"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                    />
-                    <br />
-                    <br />
+            {/* FORM (hidden by default) */}
+            {showForm && (
+                <form onSubmit={handleAdd}>
+                    <div className="card">
+                        <input
+                            placeholder="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
 
-                    <input
-                        type="number"
-                        placeholder="Min Threshold"
-                        value={minThreshold}
-                        onChange={(e) => setMinThreshold(e.target.value)}
-                    />
-                    <br />
-                    <br />
+                        <input
+                            type="number"
+                            placeholder="Quantity"
+                            value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)}
+                        />
 
-                    <input
-                        placeholder="Unit (e.g. kg, litres, units)"
-                        value={unit}
-                        onChange={(e) => setUnit(e.target.value)}
-                    />
-                    <br />
-                    <br />
+                        <input
+                            type="number"
+                            placeholder="Min Threshold"
+                            value={minThreshold}
+                            onChange={(e) => setMinThreshold(e.target.value)}
+                        />
 
-                    <button type="submit" className="button-primary">
-                        Add
-                    </button>
-                </div>
-            </form>
+                        <input
+                            placeholder="Unit (kg, litres, units)"
+                            value={unit}
+                            onChange={(e) => setUnit(e.target.value)}
+                        />
+
+                        <button type="submit" className="button-primary">
+                            Save Item
+                        </button>
+                    </div>
+                </form>
+            )}
 
             <hr className="divider" />
 

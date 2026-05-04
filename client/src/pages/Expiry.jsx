@@ -9,6 +9,7 @@ export default function Expiry() {
     const [name, setName] = useState("");
     const [expiryDate, setExpiryDate] = useState("");
     const [notifyDaysBefore, setNotifyDaysBefore] = useState("");
+    const [showForm, setShowForm] = useState(false);
 
     const fetchItems = async () => {
         try {
@@ -37,6 +38,7 @@ export default function Expiry() {
             setName("");
             setExpiryDate("");
             setNotifyDaysBefore("");
+            setShowForm(false);
 
             fetchItems();
             toast.success("Item added");
@@ -50,6 +52,7 @@ export default function Expiry() {
         try {
             await API.delete(`/expiry/${id}`);
             fetchItems();
+            toast.success("Item deleted");
         } catch (err) {
             console.error(err);
         }
@@ -60,38 +63,49 @@ export default function Expiry() {
             <Header title="Expiry Items" />
 
             {/* Add Form */}
-            <form onSubmit={handleAdd}>
-                <div className="card">
-                    <input
-                        placeholder="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <br />
-                    <br />
+            <button
+                className="button-primary"
+                onClick={() => setShowForm(!showForm)}
+            >
+                {showForm ? "Cancel" : "Add New Item"}
+            </button>
 
-                    <input
-                        type="date"
-                        value={expiryDate}
-                        onChange={(e) => setExpiryDate(e.target.value)}
-                    />
-                    <br />
-                    <br />
+            {showForm && (
+                <form onSubmit={handleAdd}>
+                    <div className="card">
+                        <input
+                            placeholder="Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <br />
+                        <br />
 
-                    <input
-                        type="number"
-                        placeholder="Notify X days before"
-                        value={notifyDaysBefore}
-                        onChange={(e) => setNotifyDaysBefore(e.target.value)}
-                    />
-                    <br />
-                    <br />
+                        <input
+                            type="date"
+                            value={expiryDate}
+                            onChange={(e) => setExpiryDate(e.target.value)}
+                        />
+                        <br />
+                        <br />
 
-                    <button type="submit" className="button-primary">
-                        Add
-                    </button>
-                </div>
-            </form>
+                        <input
+                            type="number"
+                            placeholder="Notify X days before"
+                            value={notifyDaysBefore}
+                            onChange={(e) =>
+                                setNotifyDaysBefore(e.target.value)
+                            }
+                        />
+                        <br />
+                        <br />
+
+                        <button type="submit" className="button-primary">
+                            Add
+                        </button>
+                    </div>
+                </form>
+            )}
 
             <hr className="divider" />
 

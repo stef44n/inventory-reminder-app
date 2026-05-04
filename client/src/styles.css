@@ -1,7 +1,8 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f7f7f7;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
 }
 
 /* Layout */
@@ -12,34 +13,34 @@ body {
 /* Cards */
 .card {
     background: white;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 /* Inputs */
 input {
     width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 16px;
 }
 
 /* Buttons */
 button {
     padding: 10px 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
-    background: #333;
+    background: #374151;
     color: white;
     font-size: 14px;
     cursor: pointer;
 }
 
 button:hover {
-    background: #555;
+    background: #4b5563;
 }
 
 /* Section titles */
@@ -51,14 +52,7 @@ h2 {
 .button-small {
     padding: 6px 8px;
     font-size: 12px;
-    margin-left: 5px;
-}
-
-body {
-    margin: 0;
-    font-family: system-ui, -apple-system, sans-serif;
-    background: #f5f7fb;
-    color: #1f2937;
+    /* margin-left: 5px; */
 }
 
 button {
@@ -157,9 +151,14 @@ button {
 
 /* Card layout upgrade */
 .card {
-    display: flex;
+    background: white;
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    /* display: flex;
     gap: 12px;
-    align-items: flex-start;
+    align-items: flex-start; */
 }
 
 /* Icon */
@@ -373,4 +372,56 @@ button:active {
     color: #9ca3af;
     font-size: 14px;
     margin-top: 20px;
+}
+
+/* =========================
+   FORM LAYOUT (MOBILE FIX)
+   ========================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    background: white;
+}
+
+/* Better mobile spacing */
+.card form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Prevent zoom on iOS */
+input {
+    font-size: 16px;
+}
+
+.card-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.card input {
+    margin-bottom: 10px;
+}
+
+.button-primary {
+    width: 100%;
+    margin-bottom: 12px;
 }
