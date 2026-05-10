@@ -3,11 +3,11 @@
     "short_name": "Inventory",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#f7f7f7",
-    "theme_color": "#8f2424",
+    "background_color": "#ffffff",
+    "theme_color": "#123983",
     "icons": [
         {
-            "src": "/planning.png",
+            "src": "/inventory.png",
             "sizes": "192x192",
             "type": "image/png"
         },
