@@ -5,6 +5,9 @@ import API from "../api/api";
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
+    const [darkMode, setDarkMode] = useState(
+        localStorage.getItem("theme") === "dark",
+    );
 
     useEffect(() => {
         const fetchDashboard = async () => {
@@ -18,6 +21,16 @@ export default function Dashboard() {
 
         fetchDashboard();
     }, []);
+
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.body.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    }, [darkMode]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -44,9 +57,18 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                <button className="button-small" onClick={handleLogout}>
-                    Logout
-                </button>
+                <div className="dashboard-actions">
+                    <button
+                        className="button-small"
+                        onClick={() => setDarkMode(!darkMode)}
+                    >
+                        {darkMode ? "☀️" : "🌙"}
+                    </button>
+
+                    <button className="button-small" onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
             </div>
 
             {/* NOTIFICATIONS */}
