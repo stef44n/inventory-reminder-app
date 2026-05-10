@@ -51,11 +51,6 @@ h2 {
 }
 
 /* Small buttons */
-.button-small {
-    padding: 6px 8px;
-    font-size: 12px;
-    /* margin-left: 5px; */
-}
 
 .button-small {
     padding: 8px 10px;
@@ -107,37 +102,12 @@ button {
     font-size: 13px;
 }
 
-.status-ok {
-    color: #10b981;
-}
-
-.status-due {
-    color: #ef4444;
-}
-
 /* Actions */
 .card-actions {
     margin-top: 6px;
     display: flex;
     gap: 6px;
     justify-content: flex-end;
-}
-
-/* Form button (primary) */
-.button-primary {
-    background: #2563eb;
-    color: white;
-    font-weight: bold;
-}
-
-.button-primary:hover {
-    background: #1d4ed8;
-}
-
-/* Empty state */
-.empty-text {
-    text-align: center;
-    color: #9ca3af;
 }
 
 /* Edit section */
@@ -153,15 +123,6 @@ button {
     margin: 16px 0;
     border: none;
     border-top: 1px solid #e5e7eb;
-}
-
-/* Expiry specific */
-.status-expired {
-    color: #dc2626;
-}
-
-.status-soon {
-    color: #f59e0b;
 }
 
 /* Card layout upgrade */
@@ -227,49 +188,6 @@ button {
     background: #1d4ed8;
 }
 
-/* Dashboard */
-.dashboard {
-    padding: 16px;
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.dashboard-title {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-/* Summary cards */
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
-.summary-card {
-    background: white;
-    padding: 12px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.summary-number {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.summary-label {
-    font-size: 12px;
-    color: #6b7280;
-}
-
 /* Section spacing */
 .dashboard-section {
     margin-bottom: 20px;
@@ -281,16 +199,6 @@ button {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 20px;
-}
-
-.link-card {
-    background: white;
-    padding: 12px;
-    border-radius: 10px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 /* Bottom Navigation */
@@ -365,11 +273,6 @@ button:active {
 
 .card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* Page wrapper */
-.page-wrapper {
-    padding-bottom: 70px;
 }
 
 /* Fade animation */
@@ -528,7 +431,7 @@ input:focus {
 
 .dashboard {
     padding: 18px;
-    padding-bottom: 90px;
+    padding-bottom: 40px;
     max-width: 700px;
     margin: 0 auto;
 }
