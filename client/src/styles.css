@@ -7,7 +7,9 @@ body {
 
 /* Layout */
 .container {
-    padding: 16px;
+    padding: 18px;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 /* Cards */
@@ -53,6 +55,19 @@ h2 {
     padding: 6px 8px;
     font-size: 12px;
     /* margin-left: 5px; */
+}
+
+.button-small {
+    padding: 8px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    color: #111827;
+    font-weight: 500;
+}
+
+.button-small:hover {
+    background: #e5e7eb;
 }
 
 button {
@@ -336,6 +351,12 @@ button:active {
 /* Card hover / tap */
 .card {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background: white;
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.7);
 }
 
 .card:active {
@@ -353,6 +374,11 @@ button:active {
 
 /* Fade animation */
 .page-wrapper {
+    animation: fadeIn 0.25s ease;
+}
+
+.page-wrapper {
+    padding-bottom: 90px;
     animation: fadeIn 0.25s ease;
 }
 
@@ -411,6 +437,23 @@ input {
     font-size: 16px;
 }
 
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    font-size: 16px;
+    background: #f9fafb;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
 .card-row {
     display: flex;
     gap: 12px;
@@ -424,4 +467,57 @@ input {
 .button-primary {
     width: 100%;
     margin-bottom: 12px;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 13px;
+    border: none;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+}
+
+.button-primary:hover {
+    background: #1d4ed8;
+}
+
+.button-primary:active {
+    transform: scale(0.98);
+}
+
+/* =========================
+   PREMIUM FORM ANIMATION
+   ========================= */
+
+.form-wrapper {
+    overflow: hidden;
+    animation: expandFade 0.25s ease;
+}
+
+@keyframes expandFade {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.add-item-button {
+    width: 100%;
+    background: white;
+    color: #2563eb;
+    border: 2px dashed #bfdbfe;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
+}
+
+.add-item-button:hover {
+    background: #eff6ff;
 }
