@@ -82,50 +82,53 @@ export default function Consumables() {
         <div className="container">
             <Header title="Consumables" />
 
-            {/* Add Form */}
             {/* ADD BUTTON */}
             <button
-                className="button-primary"
+                className="add-item-button"
                 onClick={() => setShowForm(!showForm)}
             >
-                {showForm ? "Cancel" : "Add New Item"}
+                {showForm ? "✕ Cancel" : "+ Add New Item"}
             </button>
 
             {/* FORM (hidden by default) */}
             {showForm && (
-                <form onSubmit={handleAdd}>
-                    <div className="card">
-                        <input
-                            placeholder="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
+                <div className="form-wrapper">
+                    <form onSubmit={handleAdd}>
+                        <div className="card">
+                            <input
+                                placeholder="Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
 
-                        <input
-                            type="number"
-                            placeholder="Quantity"
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                        />
+                            <input
+                                type="number"
+                                placeholder="Quantity"
+                                value={quantity}
+                                onChange={(e) => setQuantity(e.target.value)}
+                            />
 
-                        <input
-                            type="number"
-                            placeholder="Min Threshold"
-                            value={minThreshold}
-                            onChange={(e) => setMinThreshold(e.target.value)}
-                        />
+                            <input
+                                type="number"
+                                placeholder="Min Threshold"
+                                value={minThreshold}
+                                onChange={(e) =>
+                                    setMinThreshold(e.target.value)
+                                }
+                            />
 
-                        <input
-                            placeholder="Unit (kg, litres, units)"
-                            value={unit}
-                            onChange={(e) => setUnit(e.target.value)}
-                        />
+                            <input
+                                placeholder="Unit (kg, litres, units)"
+                                value={unit}
+                                onChange={(e) => setUnit(e.target.value)}
+                            />
 
-                        <button type="submit" className="button-primary">
-                            Save Item
-                        </button>
-                    </div>
-                </form>
+                            <button type="submit" className="button-primary">
+                                Save Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
             )}
 
             <hr className="divider" />

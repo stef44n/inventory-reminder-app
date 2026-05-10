@@ -70,33 +70,37 @@ export default function Chargeables() {
 
             {/* Add Form */}
             <button
-                className="button-primary"
+                className="add-item-button"
                 onClick={() => setShowForm(!showForm)}
             >
-                {showForm ? "Cancel" : "Add New Item"}
+                {showForm ? "✕ Cancel" : "+ Add New Item"}
             </button>
 
             {showForm && (
-                <form onSubmit={handleAdd}>
-                    <div className="card">
-                        <input
-                            placeholder="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
+                <div className="form-wrapper">
+                    <form onSubmit={handleAdd}>
+                        <div className="card">
+                            <input
+                                placeholder="Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
 
-                        <input
-                            type="number"
-                            placeholder="Charge cycle (days)"
-                            value={chargeCycleDays}
-                            onChange={(e) => setChargeCycleDays(e.target.value)}
-                        />
+                            <input
+                                type="number"
+                                placeholder="Charge cycle (days)"
+                                value={chargeCycleDays}
+                                onChange={(e) =>
+                                    setChargeCycleDays(e.target.value)
+                                }
+                            />
 
-                        <button type="submit" className="button-primary">
-                            Save Item
-                        </button>
-                    </div>
-                </form>
+                            <button type="submit" className="button-primary">
+                                Save Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
             )}
 
             <hr className="divider" />

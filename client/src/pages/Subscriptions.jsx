@@ -71,37 +71,39 @@ export default function Subscriptions() {
 
             {/* Add Form */}
             <button
-                className="button-primary"
+                className="add-item-button"
                 onClick={() => setShowForm(!showForm)}
             >
-                {showForm ? "Cancel" : "Add New Item"}
+                {showForm ? "✕ Cancel" : "+ Add New Item"}
             </button>
 
             {showForm && (
-                <form onSubmit={handleAdd}>
-                    <div className="card">
-                        <input
-                            placeholder="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <br />
-                        <br />
+                <div className="form-wrapper">
+                    <form onSubmit={handleAdd}>
+                        <div className="card">
+                            <input
+                                placeholder="Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <br />
+                            <br />
 
-                        <input
-                            type="number"
-                            placeholder="Cycle (days)"
-                            value={cycleDays}
-                            onChange={(e) => setCycleDays(e.target.value)}
-                        />
-                        <br />
-                        <br />
+                            <input
+                                type="number"
+                                placeholder="Cycle (days)"
+                                value={cycleDays}
+                                onChange={(e) => setCycleDays(e.target.value)}
+                            />
+                            <br />
+                            <br />
 
-                        <button type="submit" className="button-primary">
-                            Add
-                        </button>
-                    </div>
-                </form>
+                            <button type="submit" className="button-primary">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
             )}
 
             <hr className="divider" />

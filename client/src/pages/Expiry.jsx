@@ -64,47 +64,49 @@ export default function Expiry() {
 
             {/* Add Form */}
             <button
-                className="button-primary"
+                className="add-item-button"
                 onClick={() => setShowForm(!showForm)}
             >
-                {showForm ? "Cancel" : "Add New Item"}
+                {showForm ? "✕ Cancel" : "+ Add New Item"}
             </button>
 
             {showForm && (
-                <form onSubmit={handleAdd}>
-                    <div className="card">
-                        <input
-                            placeholder="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <br />
-                        <br />
+                <div className="form-wrapper">
+                    <form onSubmit={handleAdd}>
+                        <div className="card">
+                            <input
+                                placeholder="Name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <br />
+                            <br />
 
-                        <input
-                            type="date"
-                            value={expiryDate}
-                            onChange={(e) => setExpiryDate(e.target.value)}
-                        />
-                        <br />
-                        <br />
+                            <input
+                                type="date"
+                                value={expiryDate}
+                                onChange={(e) => setExpiryDate(e.target.value)}
+                            />
+                            <br />
+                            <br />
 
-                        <input
-                            type="number"
-                            placeholder="Notify X days before"
-                            value={notifyDaysBefore}
-                            onChange={(e) =>
-                                setNotifyDaysBefore(e.target.value)
-                            }
-                        />
-                        <br />
-                        <br />
+                            <input
+                                type="number"
+                                placeholder="Notify X days before"
+                                value={notifyDaysBefore}
+                                onChange={(e) =>
+                                    setNotifyDaysBefore(e.target.value)
+                                }
+                            />
+                            <br />
+                            <br />
 
-                        <button type="submit" className="button-primary">
-                            Add
-                        </button>
-                    </div>
-                </form>
+                            <button type="submit" className="button-primary">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
             )}
 
             <hr className="divider" />
