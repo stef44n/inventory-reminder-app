@@ -21,6 +21,14 @@ export default function Chargeables() {
 
     useEffect(() => {
         fetchItems();
+
+        const openForm = () => setShowForm(true);
+
+        window.addEventListener("openAddChargeable", openForm);
+
+        return () => {
+            window.removeEventListener("openAddChargeable", openForm);
+        };
     }, []);
 
     const handleAdd = async (e) => {
@@ -148,6 +156,7 @@ export default function Chargeables() {
                                     {/* ACTIONS */}
                                     <div className="card-actions">
                                         <button
+                                            type="button"
                                             className="button-small"
                                             onClick={() =>
                                                 handleMarkCharged(item.id)
@@ -157,6 +166,7 @@ export default function Chargeables() {
                                         </button>
 
                                         <button
+                                            type="button"
                                             className="button-small"
                                             onClick={() =>
                                                 handleDelete(item.id)

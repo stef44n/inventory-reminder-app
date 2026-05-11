@@ -22,6 +22,14 @@ export default function Expiry() {
 
     useEffect(() => {
         fetchItems();
+
+        const openForm = () => setShowForm(true);
+
+        window.addEventListener("openAddExpiry", openForm);
+
+        return () => {
+            window.removeEventListener("openAddExpiry", openForm);
+        };
     }, []);
 
     const handleAdd = async (e) => {
@@ -173,6 +181,7 @@ export default function Expiry() {
                                     {/* ACTIONS */}
                                     <div className="card-actions">
                                         <button
+                                            type="button"
                                             className="button-small"
                                             onClick={() =>
                                                 handleDelete(item.id)

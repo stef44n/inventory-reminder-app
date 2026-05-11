@@ -21,6 +21,14 @@ export default function Subscriptions() {
 
     useEffect(() => {
         fetchItems();
+
+        const openForm = () => setShowForm(true);
+
+        window.addEventListener("openAddSubscription", openForm);
+
+        return () => {
+            window.removeEventListener("openAddSubscription", openForm);
+        };
     }, []);
 
     const handleAdd = async (e) => {
@@ -180,6 +188,7 @@ export default function Subscriptions() {
                                         {/* ACTIONS */}
                                         <div className="card-actions">
                                             <button
+                                                type="button"
                                                 className="button-small"
                                                 onClick={() =>
                                                     handleRenew(item.id)
@@ -189,6 +198,7 @@ export default function Subscriptions() {
                                             </button>
 
                                             <button
+                                                type="button"
                                                 className="button-small"
                                                 onClick={() =>
                                                     handleDelete(item.id)

@@ -25,6 +25,14 @@ export default function Consumables() {
 
     useEffect(() => {
         fetchItems();
+
+        const openForm = () => setShowForm(true);
+
+        window.addEventListener("openAddConsumable", openForm);
+
+        return () => {
+            window.removeEventListener("openAddConsumable", openForm);
+        };
     }, []);
 
     const handleAdd = async (e) => {
@@ -176,6 +184,7 @@ export default function Consumables() {
                                     {/* ACTIONS */}
                                     <div className="card-actions">
                                         <button
+                                            type="button"
                                             className="button-small"
                                             onClick={() => {
                                                 setEditingItemId(item.id);
@@ -188,6 +197,7 @@ export default function Consumables() {
                                         </button>
 
                                         <button
+                                            type="button"
                                             className="button-small"
                                             onClick={() =>
                                                 handleDelete(item.id)
@@ -211,6 +221,7 @@ export default function Consumables() {
                                             />
 
                                             <button
+                                                type="button"
                                                 className="button-small"
                                                 onClick={() =>
                                                     handleUpdate(item.id)
