@@ -564,3 +564,41 @@ button {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
         box-shadow 0.2s ease;
 }
+
+/* Floating Action Button */
+.fab {
+    position: fixed;
+    right: 20px;
+    bottom: 88px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    font-size: 30px;
+    font-weight: 300;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35),
+        0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+}
+
+.fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45),
+        0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.fab:active {
+    transform: scale(0.94);
+}
+
+/* Dark mode */
+body.dark .fab {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
