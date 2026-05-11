@@ -602,3 +602,62 @@ button {
 body.dark .fab {
     background: linear-gradient(135deg, #3b82f6, #60a5fa);
 }
+
+/* Swipe wrapper */
+.swipe-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    margin-bottom: 12px;
+}
+
+/* Swipe card */
+.swipe-card {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.2s ease;
+    touch-action: pan-y;
+    will-change: transform;
+}
+
+/* Swipe background actions */
+.swipe-action {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+/* Left action */
+.swipe-left {
+    left: 0;
+    background: #2563eb;
+}
+
+/* Right action */
+.swipe-right {
+    right: 0;
+    background: #ef4444;
+}
+
+/* Swipe buttons */
+.swipe-btn {
+    border: none;
+    background: transparent;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Dark mode */
+body.dark .swipe-left {
+    background: #3b82f6;
+}
+
+body.dark .swipe-right {
+    background: #dc2626;
+}
