@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 import Header from "../components/Header";
 import Card from "../components/Card";
+import SwipeCard from "../components/SwipeCard";
 import toast from "react-hot-toast";
 
 export default function Chargeables() {
@@ -129,55 +130,66 @@ export default function Chargeables() {
                     const isDue = now >= nextCharge;
 
                     return (
-                        <Card key={item.id} icon="🔋">
-                            <div className="card-row">
-                                {/* LEFT */}
-                                <div className="card-left">
-                                    <span className="card-title">
-                                        {item.name}
-                                    </span>
-                                    <span className="card-subtext">
-                                        Every {item.chargeable.chargeCycleDays}{" "}
-                                        days
-                                    </span>
-                                </div>
-
-                                {/* RIGHT */}
-                                <div className="card-right">
-                                    {/* STATUS */}
-                                    <div
-                                        className={`status ${
-                                            isDue ? "status-due" : "status-ok"
-                                        }`}
-                                    >
-                                        {isDue ? "Due" : "OK"}
+                        <SwipeCard
+                            key={item.id}
+                            leftAction={(close) => (
+                                <button
+                                    type="button"
+                                    className="swipe-btn"
+                                    onClick={() => {
+                                        handleMarkCharged(item.id);
+                                        close();
+                                    }}
+                                >
+                                    Charged
+                                </button>
+                            )}
+                            rightAction={(close) => (
+                                <button
+                                    type="button"
+                                    className="swipe-btn"
+                                    onClick={() => {
+                                        handleDelete(item.id);
+                                        close();
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            )}
+                        >
+                            <Card icon="🔋">
+                                <div className="card-row">
+                                    {/* LEFT */}
+                                    <div className="card-left">
+                                        <span className="card-title">
+                                            {item.name}
+                                        </span>
+                                        <span className="card-subtext">
+                                            Every{" "}
+                                            {item.chargeable.chargeCycleDays}{" "}
+                                            days
+                                        </span>
                                     </div>
 
-                                    {/* ACTIONS */}
-                                    <div className="card-actions">
-                                        <button
-                                            type="button"
-                                            className="button-small"
-                                            onClick={() =>
-                                                handleMarkCharged(item.id)
-                                            }
+                                    {/* RIGHT */}
+                                    <div className="card-right">
+                                        {/* STATUS */}
+                                        <div
+                                            className={`status ${
+                                                isDue
+                                                    ? "status-due"
+                                                    : "status-ok"
+                                            }`}
                                         >
-                                            Charged
-                                        </button>
+                                            {isDue ? "Due" : "OK"}
+                                        </div>
 
-                                        <button
-                                            type="button"
-                                            className="button-small"
-                                            onClick={() =>
-                                                handleDelete(item.id)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
+                                        {/* ACTIONS */}
+                                        <div className="card-actions"></div>
                                     </div>
                                 </div>
-                            </div>
-                        </Card>
+                            </Card>
+                        </SwipeCard>
                     );
                 })
             )}

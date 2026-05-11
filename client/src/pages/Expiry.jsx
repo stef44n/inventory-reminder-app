@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../api/api";
 import Header from "../components/Header";
 import Card from "../components/Card";
+import SwipeCard from "../components/SwipeCard";
 import toast from "react-hot-toast";
 
 export default function Expiry() {
@@ -145,54 +146,62 @@ export default function Expiry() {
                     }
 
                     return (
-                        <Card key={item.id} icon="⏳">
-                            <div className="card-row">
-                                {/* LEFT */}
-                                <div className="card-left">
-                                    <span className="card-title">
-                                        {item.name}
-                                    </span>
+                        <SwipeCard
+                            key={item.id}
+                            rightAction={(close) => (
+                                <button
+                                    type="button"
+                                    className="swipe-btn"
+                                    onClick={() => {
+                                        handleDelete(item.id);
+                                        close();
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            )}
+                        >
+                            <Card icon="⏳">
+                                <div className="card-row">
+                                    {/* LEFT */}
+                                    <div className="card-left">
+                                        <span className="card-title">
+                                            {item.name}
+                                        </span>
 
-                                    <span className="card-subtext">
-                                        Expires:{" "}
-                                        {expiryDate.toLocaleDateString()}
-                                    </span>
+                                        <span className="card-subtext">
+                                            Expires:{" "}
+                                            {expiryDate.toLocaleDateString()}
+                                        </span>
 
-                                    <span className="card-subtext">
-                                        {diffDays >= 0
-                                            ? `${diffDays} day${
-                                                  diffDays !== 1 ? "s" : ""
-                                              } left`
-                                            : `${Math.abs(diffDays)} day${
-                                                  Math.abs(diffDays) !== 1
-                                                      ? "s"
-                                                      : ""
-                                              } overdue`}
-                                    </span>
-                                </div>
-
-                                {/* RIGHT */}
-                                <div className="card-right">
-                                    {/* STATUS */}
-                                    <div className={`status ${statusClass}`}>
-                                        {statusText}
+                                        <span className="card-subtext">
+                                            {diffDays >= 0
+                                                ? `${diffDays} day${
+                                                      diffDays !== 1 ? "s" : ""
+                                                  } left`
+                                                : `${Math.abs(diffDays)} day${
+                                                      Math.abs(diffDays) !== 1
+                                                          ? "s"
+                                                          : ""
+                                                  } overdue`}
+                                        </span>
                                     </div>
 
-                                    {/* ACTIONS */}
-                                    <div className="card-actions">
-                                        <button
-                                            type="button"
-                                            className="button-small"
-                                            onClick={() =>
-                                                handleDelete(item.id)
-                                            }
+                                    {/* RIGHT */}
+                                    <div className="card-right">
+                                        {/* STATUS */}
+                                        <div
+                                            className={`status ${statusClass}`}
                                         >
-                                            Delete
-                                        </button>
+                                            {statusText}
+                                        </div>
+
+                                        {/* ACTIONS */}
+                                        <div className="card-actions"></div>
                                     </div>
                                 </div>
-                            </div>
-                        </Card>
+                            </Card>
+                        </SwipeCard>
                     );
                 })
             )}
