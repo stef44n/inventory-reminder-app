@@ -6,57 +6,70 @@ import API from "../api/api";
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
+
             const res = await API.post("/auth/login", {
                 email,
                 password,
             });
 
-            // Save token
             localStorage.setItem("token", res.data.token);
 
-            // Redirect to dashboard
             navigate("/dashboard");
         } catch (error) {
             console.error(error);
             alert("Login failed");
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div style={{ padding: "20px" }}>
-            <h2>Login</h2>
+        <div className="auth-page">
+            <div className="auth-card">
+                <h2 className="auth-title">Welcome Back</h2>
 
-            <form onSubmit={handleLogin}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <br />
-                <br />
+                <p className="auth-subtitle">Login to your inventory</p>
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <br />
-                <br />
+                <form onSubmit={handleLogin} className="auth-form">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
-                <button type="submit">Login</button>
-            </form>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-            <p>
-                Don't have an account? <Link to="/register">Register</Link>
-            </p>
+                    <button
+                        type="submit"
+                        className="button-primary auth-button"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <span className="button-loader"></span>
+                        ) : (
+                            "Login"
+                        )}
+                    </button>
+                </form>
+
+                <p className="auth-footer">
+                    Don't have an account? <Link to="/register">Register</Link>
+                </p>
+            </div>
         </div>
     );
 }
