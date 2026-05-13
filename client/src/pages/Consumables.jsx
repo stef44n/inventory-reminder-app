@@ -94,6 +94,38 @@ export default function Consumables() {
         }
     };
 
+    const handleQuickAdjust = async (id, currentQuantity, amount) => {
+        const newQuantity = Math.max(0, currentQuantity + amount);
+
+        // instant frontend update
+        setItems((prev) =>
+            prev.map((item) =>
+                item.id === id
+                    ? {
+                          ...item,
+                          consumable: {
+                              ...item.consumable,
+                              quantity: newQuantity,
+                          },
+                      }
+                    : item,
+            ),
+        );
+
+        try {
+            await API.put(`/consumables/${id}`, {
+                quantity: newQuantity,
+            });
+        } catch (err) {
+            console.error(err);
+
+            // rollback if failed
+            fetchItems();
+
+            toast.error("Update failed");
+        }
+    };
+
     return (
         <div className="container">
             <Header title="Consumables" />
@@ -203,10 +235,42 @@ export default function Consumables() {
                                             {item.name}
                                         </span>
 
-                                        <span className="card-subtext">
-                                            {item.consumable.quantity}{" "}
-                                            {item.consumable.unit}
-                                        </span>
+                                        <div className="quantity-row">
+                                            <button
+                                                type="button"
+                                                className="quantity-btn"
+                                                onClick={() =>
+                                                    handleQuickAdjust(
+                                                        item.id,
+                                                        item.consumable
+                                                            .quantity,
+                                                        -1,
+                                                    )
+                                                }
+                                            >
+                                                −
+                                            </button>
+
+                                            <span className="quantity-value">
+                                                {item.consumable.quantity}{" "}
+                                                {item.consumable.unit}
+                                            </span>
+
+                                            <button
+                                                type="button"
+                                                className="quantity-btn"
+                                                onClick={() =>
+                                                    handleQuickAdjust(
+                                                        item.id,
+                                                        item.consumable
+                                                            .quantity,
+                                                        1,
+                                                    )
+                                                }
+                                            >
+                                                +
+                                            </button>
+                                        </div>
 
                                         <span className="card-subtext">
                                             Min: {item.consumable.minThreshold}{" "}
@@ -228,31 +292,7 @@ export default function Consumables() {
                                         </div>
 
                                         {/* ACTIONS */}
-                                        <div className="card-actions">
-                                            <button
-                                                type="button"
-                                                className="button-small"
-                                                onClick={() => {
-                                                    setEditingItemId(item.id);
-                                                    setEditQuantity(
-                                                        item.consumable
-                                                            .quantity,
-                                                    );
-                                                }}
-                                            >
-                                                Edit
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                className="button-small"
-                                                onClick={() =>
-                                                    handleDelete(item.id)
-                                                }
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
+                                        <div className="card-actions"></div>
 
                                         {/* EDIT SECTION */}
                                         {editingItemId === item.id && (
