@@ -3,20 +3,27 @@ import API from "../api/api";
 import Card from "../components/Card";
 import Header from "../components/Header";
 import SwipeCard from "../components/SwipeCard";
+import SkeletonCard from "../components/SkeletonCard";
 import toast from "react-hot-toast";
 
 export default function Subscriptions() {
     const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [cycleDays, setCycleDays] = useState("");
     const [showForm, setShowForm] = useState(false);
 
     const fetchItems = async () => {
         try {
+            setLoading(true);
+
             const res = await API.get("/subscriptions");
+
             setItems(res.data);
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -119,7 +126,13 @@ export default function Subscriptions() {
 
             {/* List */}
 
-            {items.length === 0 ? (
+            {loading ? (
+                <>
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                </>
+            ) : items.length === 0 ? (
                 <p className="empty-text">No subscriptions yet</p>
             ) : (
                 items.map((item) => (

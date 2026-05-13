@@ -3,10 +3,12 @@ import API from "../api/api";
 import Header from "../components/Header";
 import Card from "../components/Card";
 import SwipeCard from "../components/SwipeCard";
+import SkeletonCard from "../components/SkeletonCard";
 import toast from "react-hot-toast";
 
 export default function Expiry() {
     const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [expiryDate, setExpiryDate] = useState("");
     const [notifyDaysBefore, setNotifyDaysBefore] = useState("");
@@ -14,10 +16,15 @@ export default function Expiry() {
 
     const fetchItems = async () => {
         try {
+            setLoading(true);
+
             const res = await API.get("/expiry");
+
             setItems(res.data);
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -122,7 +129,13 @@ export default function Expiry() {
 
             {/* List */}
 
-            {items.length === 0 ? (
+            {loading ? (
+                <>
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                </>
+            ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
                 items.map((item) => {

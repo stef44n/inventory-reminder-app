@@ -3,10 +3,12 @@ import API from "../api/api";
 import Card from "../components/Card";
 import Header from "../components/Header";
 import SwipeCard from "../components/SwipeCard";
+import SkeletonCard from "../components/SkeletonCard";
 import toast from "react-hot-toast";
 
 export default function Consumables() {
     const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
     const [minThreshold, setMinThreshold] = useState("");
@@ -17,10 +19,15 @@ export default function Consumables() {
 
     const fetchItems = async () => {
         try {
+            setLoading(true);
+
             const res = await API.get("/consumables");
+
             setItems(res.data);
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -143,7 +150,13 @@ export default function Consumables() {
             <hr className="divider" />
 
             {/* List */}
-            {items.length === 0 ? (
+            {loading ? (
+                <>
+                    <SkeletonCard />
+                    <SkeletonCard />
+                    <SkeletonCard />
+                </>
+            ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
                 items.map((item) => {
