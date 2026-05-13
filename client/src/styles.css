@@ -26,6 +26,9 @@
 
     --danger-bg: #fee2e2;
     --danger-text: #991b1b;
+
+    --skeleton-base: #e5e7eb;
+    --skeleton-shimmer: rgba(255, 255, 255, 0.7);
 }
 
 /* DARK MODE */
@@ -53,6 +56,9 @@
 
     --danger-bg: rgba(239, 68, 68, 0.15);
     --danger-text: #fca5a5;
+
+    --skeleton-base: rgba(255, 255, 255, 0.08);
+    --skeleton-shimmer: rgba(255, 255, 255, 0.14);
 }
 
 body {
@@ -694,7 +700,9 @@ body.dark .swipe-right {
     width: 42px;
     height: 42px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--skeleton-base);
+    position: relative;
+    overflow: hidden;
 }
 
 .skeleton-content {
@@ -705,7 +713,7 @@ body.dark .swipe-right {
     height: 12px;
     border-radius: 999px;
     margin-bottom: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--skeleton-base);
     position: relative;
     overflow: hidden;
 }
@@ -719,7 +727,7 @@ body.dark .swipe-right {
     width: 40%;
 }
 
-/* shimmer effect */
+/* shimmer */
 .skeleton-line::after,
 .skeleton-icon::after {
     content: "";
@@ -729,7 +737,7 @@ body.dark .swipe-right {
     background: linear-gradient(
         90deg,
         transparent,
-        rgba(255, 255, 255, 0.12),
+        var(--skeleton-shimmer),
         transparent
     );
 
