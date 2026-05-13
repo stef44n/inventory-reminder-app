@@ -822,3 +822,54 @@ body.dark .swipe-right {
         transform: rotate(360deg);
     }
 }
+
+/* =========================
+   Quantity Controls
+========================= */
+
+.quantity-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.quantity-value {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 20px;
+}
+
+.quantity-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: inherit;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* light mode */
+:root .quantity-btn {
+    background: #eef2f7;
+}
+
+/* dark mode */
+.dark .quantity-btn {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.quantity-btn:hover {
+    transform: scale(1.05);
+}
+
+.quantity-btn:active {
+    transform: scale(0.92);
+}
