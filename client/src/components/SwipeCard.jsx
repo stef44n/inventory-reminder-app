@@ -2,32 +2,54 @@ import { useRef, useState } from "react";
 
 export default function SwipeCard({ children, leftAction, rightAction }) {
     const [translateX, setTranslateX] = useState(0);
+
     const startX = useRef(0);
+    const currentX = useRef(0);
+    const startTime = useRef(0);
+
+    const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
         startX.current = e.touches[0].clientX;
+        currentX.current = startX.current;
+        startTime.current = Date.now();
     };
 
     const handleTouchMove = (e) => {
-        const currentX = e.touches[0].clientX;
-        const diff = currentX - startX.current;
+        const x = e.touches[0].clientX;
 
-        // limit swipe distance
-        if (diff > 100) {
-            setTranslateX(100);
-        } else if (diff < -100) {
-            setTranslateX(-100);
-        } else {
-            setTranslateX(diff);
+        currentX.current = x;
+
+        let diff = x - startX.current;
+
+        // resistance near edges
+        if (diff > MAX_SWIPE) {
+            diff = MAX_SWIPE + (diff - MAX_SWIPE) * 0.2;
         }
+
+        if (diff < -MAX_SWIPE) {
+            diff = -MAX_SWIPE + (diff + MAX_SWIPE) * 0.2;
+        }
+
+        setTranslateX(diff);
     };
 
     const handleTouchEnd = () => {
-        // snap open
-        if (translateX > 60) {
-            setTranslateX(80);
-        } else if (translateX < -60) {
-            setTranslateX(-80);
+        const distance = currentX.current - startX.current;
+
+        const time = Date.now() - startTime.current;
+
+        const velocity = distance / time;
+
+        // momentum detection
+        const shouldOpenRight = distance > 55 || velocity > 0.45;
+
+        const shouldOpenLeft = distance < -55 || velocity < -0.45;
+
+        if (shouldOpenRight) {
+            setTranslateX(MAX_SWIPE);
+        } else if (shouldOpenLeft) {
+            setTranslateX(-MAX_SWIPE);
         } else {
             setTranslateX(0);
         }

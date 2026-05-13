@@ -611,13 +611,23 @@ body.dark .fab {
     margin-bottom: 12px;
 }
 
+.swipe-wrapper:active .card {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
 /* Swipe card */
 .swipe-card {
     position: relative;
     z-index: 2;
-    transition: transform 0.2s ease;
     touch-action: pan-y;
     will-change: transform;
+
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.2s ease;
+}
+
+.swipe-card:active {
+    transform: scale(0.995);
 }
 
 /* Swipe background actions */
@@ -630,6 +640,12 @@ body.dark .fab {
     align-items: center;
     justify-content: center;
     z-index: 1;
+    overflow: hidden;
+}
+
+.swipe-action button {
+    opacity: 0.95;
+    transform: scale(0.96);
 }
 
 /* Left action */
