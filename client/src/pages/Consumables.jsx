@@ -17,6 +17,7 @@ export default function Consumables() {
     const [editQuantity, setEditQuantity] = useState("");
     const [showForm, setShowForm] = useState(false);
     const holdInterval = useRef(null);
+    const syncTimeout = useRef({});
 
     const fetchItems = async () => {
         try {
@@ -43,6 +44,7 @@ export default function Consumables() {
             window.removeEventListener("openAddConsumable", openForm);
 
             clearInterval(holdInterval.current);
+            Object.values(syncTimeout.current).forEach(clearTimeout);
         };
     }, []);
 
@@ -97,7 +99,7 @@ export default function Consumables() {
         }
     };
 
-    const handleQuickAdjust = async (id, currentQuantity, amount) => {
+    const handleQuickAdjust = (id, currentQuantity, amount) => {
         const newQuantity = Math.max(0, currentQuantity + amount);
 
         // instant frontend update
@@ -115,35 +117,39 @@ export default function Consumables() {
             ),
         );
 
-        try {
-            await API.put(`/consumables/${id}`, {
-                quantity: newQuantity,
-            });
-        } catch (err) {
-            console.error(err);
-
-            // rollback if failed
-            fetchItems();
-
-            toast.error("Update failed");
+        // clear previous pending sync
+        if (syncTimeout.current[id]) {
+            clearTimeout(syncTimeout.current[id]);
         }
+
+        // debounce backend sync
+        syncTimeout.current[id] = setTimeout(async () => {
+            try {
+                await API.put(`/consumables/${id}`, {
+                    quantity: newQuantity,
+                });
+            } catch (err) {
+                console.error(err);
+
+                fetchItems();
+
+                toast.error("Sync failed");
+            }
+        }, 400);
+
+        return newQuantity;
     };
 
     const startAdjusting = (id, quantity, amount) => {
-        // immediate first update
-        handleQuickAdjust(id, quantity, amount);
-
-        let currentQuantity = quantity + amount;
+        let currentQuantity = handleQuickAdjust(id, quantity, amount);
 
         holdInterval.current = setInterval(() => {
-            handleQuickAdjust(id, currentQuantity, amount);
+            currentQuantity = handleQuickAdjust(id, currentQuantity, amount);
 
-            currentQuantity += amount;
-
-            if (currentQuantity < 0) {
+            if (currentQuantity <= 0 && amount < 0) {
                 stopAdjusting();
             }
-        }, 180);
+        }, 120);
     };
 
     const stopAdjusting = () => {
