@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import API from "../api/api";
 import Card from "../components/Card";
 import Header from "../components/Header";
@@ -16,6 +16,7 @@ export default function Consumables() {
     const [editingItemId, setEditingItemId] = useState(null);
     const [editQuantity, setEditQuantity] = useState("");
     const [showForm, setShowForm] = useState(false);
+    const holdInterval = useRef(null);
 
     const fetchItems = async () => {
         try {
@@ -40,6 +41,8 @@ export default function Consumables() {
 
         return () => {
             window.removeEventListener("openAddConsumable", openForm);
+
+            clearInterval(holdInterval.current);
         };
     }, []);
 
@@ -124,6 +127,27 @@ export default function Consumables() {
 
             toast.error("Update failed");
         }
+    };
+
+    const startAdjusting = (id, quantity, amount) => {
+        // immediate first update
+        handleQuickAdjust(id, quantity, amount);
+
+        let currentQuantity = quantity + amount;
+
+        holdInterval.current = setInterval(() => {
+            handleQuickAdjust(id, currentQuantity, amount);
+
+            currentQuantity += amount;
+
+            if (currentQuantity < 0) {
+                stopAdjusting();
+            }
+        }, 180);
+    };
+
+    const stopAdjusting = () => {
+        clearInterval(holdInterval.current);
     };
 
     return (
@@ -239,14 +263,25 @@ export default function Consumables() {
                                             <button
                                                 type="button"
                                                 className="quantity-btn"
-                                                onClick={() =>
-                                                    handleQuickAdjust(
+                                                onMouseDown={() =>
+                                                    startAdjusting(
                                                         item.id,
                                                         item.consumable
                                                             .quantity,
                                                         -1,
                                                     )
                                                 }
+                                                onMouseUp={stopAdjusting}
+                                                onMouseLeave={stopAdjusting}
+                                                onTouchStart={() =>
+                                                    startAdjusting(
+                                                        item.id,
+                                                        item.consumable
+                                                            .quantity,
+                                                        -1,
+                                                    )
+                                                }
+                                                onTouchEnd={stopAdjusting}
                                             >
                                                 −
                                             </button>
@@ -259,14 +294,25 @@ export default function Consumables() {
                                             <button
                                                 type="button"
                                                 className="quantity-btn"
-                                                onClick={() =>
-                                                    handleQuickAdjust(
+                                                onMouseDown={() =>
+                                                    startAdjusting(
                                                         item.id,
                                                         item.consumable
                                                             .quantity,
                                                         1,
                                                     )
                                                 }
+                                                onMouseUp={stopAdjusting}
+                                                onMouseLeave={stopAdjusting}
+                                                onTouchStart={() =>
+                                                    startAdjusting(
+                                                        item.id,
+                                                        item.consumable
+                                                            .quantity,
+                                                        1,
+                                                    )
+                                                }
+                                                onTouchEnd={stopAdjusting}
                                             >
                                                 +
                                             </button>
