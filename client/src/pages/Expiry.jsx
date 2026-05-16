@@ -13,6 +13,7 @@ export default function Expiry() {
     const [expiryDate, setExpiryDate] = useState("");
     const [notifyDaysBefore, setNotifyDaysBefore] = useState("");
     const [showForm, setShowForm] = useState(false);
+    const [activeSwipeId, setActiveSwipeId] = useState(null);
 
     const fetchItems = async () => {
         try {
@@ -161,6 +162,9 @@ export default function Expiry() {
                     return (
                         <SwipeCard
                             key={item.id}
+                            isActive={activeSwipeId === item.id}
+                            onActivate={() => setActiveSwipeId(item.id)}
+                            onCloseOther={() => setActiveSwipeId(null)}
                             rightAction={(close) => (
                                 <button
                                     type="button"
