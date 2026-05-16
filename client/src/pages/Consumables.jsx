@@ -16,8 +16,11 @@ export default function Consumables() {
     const [editingItemId, setEditingItemId] = useState(null);
     const [editQuantity, setEditQuantity] = useState("");
     const [showForm, setShowForm] = useState(false);
-    const holdInterval = useRef(null);
     const syncTimeout = useRef({});
+    const holdTimeoutRef = useRef(null);
+    const holdIntervalRef = useRef(null);
+    const holdStartRef = useRef(null);
+    const pendingUpdatesRef = useRef({});
 
     const fetchItems = async () => {
         try {
@@ -39,11 +42,14 @@ export default function Consumables() {
         const openForm = () => setShowForm(true);
 
         window.addEventListener("openAddConsumable", openForm);
+        window.addEventListener("pointerup", stopHold);
 
         return () => {
             window.removeEventListener("openAddConsumable", openForm);
+            window.removeEventListener("pointerup", stopHold);
 
-            clearInterval(holdInterval.current);
+            clearTimeout(holdTimeoutRef.current);
+            clearInterval(holdIntervalRef.current);
             Object.values(syncTimeout.current).forEach(clearTimeout);
         };
     }, []);
@@ -99,25 +105,8 @@ export default function Consumables() {
         }
     };
 
-    const handleQuickAdjust = (id, currentQuantity, amount) => {
-        const newQuantity = Math.max(0, currentQuantity + amount);
-
-        // instant frontend update
-        setItems((prev) =>
-            prev.map((item) =>
-                item.id === id
-                    ? {
-                          ...item,
-                          consumable: {
-                              ...item.consumable,
-                              quantity: newQuantity,
-                          },
-                      }
-                    : item,
-            ),
-        );
-
-        // clear previous pending sync
+    const queueUpdate = async (id, quantity) => {
+        // clear previous sync timer
         if (syncTimeout.current[id]) {
             clearTimeout(syncTimeout.current[id]);
         }
@@ -126,8 +115,10 @@ export default function Consumables() {
         syncTimeout.current[id] = setTimeout(async () => {
             try {
                 await API.put(`/consumables/${id}`, {
-                    quantity: newQuantity,
+                    quantity,
                 });
+
+                delete pendingUpdatesRef.current[id];
             } catch (err) {
                 console.error(err);
 
@@ -135,25 +126,65 @@ export default function Consumables() {
 
                 toast.error("Sync failed");
             }
-        }, 400);
-
-        return newQuantity;
+        }, 350);
     };
 
-    const startAdjusting = (id, quantity, amount) => {
-        let currentQuantity = handleQuickAdjust(id, quantity, amount);
+    const startHold = (id, currentQty, change) => {
+        holdStartRef.current = Date.now();
 
-        holdInterval.current = setInterval(() => {
-            currentQuantity = handleQuickAdjust(id, currentQuantity, amount);
+        let localQty = currentQty;
 
-            if (currentQuantity <= 0 && amount < 0) {
-                stopAdjusting();
+        const runUpdate = async () => {
+            const heldFor = Date.now() - holdStartRef.current;
+
+            // 🔥 acceleration curve
+            let step = 1;
+
+            if (heldFor > 4000) {
+                step = 10;
+            } else if (heldFor > 2500) {
+                step = 5;
+            } else if (heldFor > 1200) {
+                step = 2;
             }
-        }, 120);
+
+            localQty += change * step;
+
+            if (localQty < 0) {
+                localQty = 0;
+            }
+
+            // instant UI update
+            setItems((prev) =>
+                prev.map((item) =>
+                    item.id === id
+                        ? {
+                              ...item,
+                              consumable: {
+                                  ...item.consumable,
+                                  quantity: localQty,
+                              },
+                          }
+                        : item,
+                ),
+            );
+
+            pendingUpdatesRef.current[id] = localQty;
+
+            queueUpdate(id, localQty);
+        };
+
+        // initial single press
+        runUpdate();
+
+        holdTimeoutRef.current = setTimeout(() => {
+            holdIntervalRef.current = setInterval(runUpdate, 120);
+        }, 300);
     };
 
-    const stopAdjusting = () => {
-        clearInterval(holdInterval.current);
+    const stopHold = () => {
+        clearTimeout(holdTimeoutRef.current);
+        clearInterval(holdIntervalRef.current);
     };
 
     return (
@@ -269,25 +300,19 @@ export default function Consumables() {
                                             <button
                                                 type="button"
                                                 className="quantity-btn"
-                                                onMouseDown={() =>
-                                                    startAdjusting(
+                                                onPointerDown={(e) => {
+                                                    e.preventDefault();
+
+                                                    startHold(
                                                         item.id,
                                                         item.consumable
                                                             .quantity,
                                                         -1,
-                                                    )
-                                                }
-                                                onMouseUp={stopAdjusting}
-                                                onMouseLeave={stopAdjusting}
-                                                onTouchStart={() =>
-                                                    startAdjusting(
-                                                        item.id,
-                                                        item.consumable
-                                                            .quantity,
-                                                        -1,
-                                                    )
-                                                }
-                                                onTouchEnd={stopAdjusting}
+                                                    );
+                                                }}
+                                                onPointerUp={stopHold}
+                                                onPointerLeave={stopHold}
+                                                onPointerCancel={stopHold}
                                             >
                                                 −
                                             </button>
@@ -300,25 +325,19 @@ export default function Consumables() {
                                             <button
                                                 type="button"
                                                 className="quantity-btn"
-                                                onMouseDown={() =>
-                                                    startAdjusting(
+                                                onPointerDown={(e) => {
+                                                    e.preventDefault();
+
+                                                    startHold(
                                                         item.id,
                                                         item.consumable
                                                             .quantity,
                                                         1,
-                                                    )
-                                                }
-                                                onMouseUp={stopAdjusting}
-                                                onMouseLeave={stopAdjusting}
-                                                onTouchStart={() =>
-                                                    startAdjusting(
-                                                        item.id,
-                                                        item.consumable
-                                                            .quantity,
-                                                        1,
-                                                    )
-                                                }
-                                                onTouchEnd={stopAdjusting}
+                                                    );
+                                                }}
+                                                onPointerUp={stopHold}
+                                                onPointerLeave={stopHold}
+                                                onPointerCancel={stopHold}
                                             >
                                                 +
                                             </button>

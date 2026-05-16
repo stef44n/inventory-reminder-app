@@ -873,3 +873,57 @@ body.dark .swipe-right {
 .quantity-btn:active {
     transform: scale(0.92);
 }
+
+.quantity-btn:active {
+    transform: scale(0.92);
+}
+
+.quantity-btn {
+    transition: transform 0.08s ease, background 0.15s ease;
+}
+
+/* Prevent ugly text selection on controls */
+.quantity-btn,
+.quantity-row,
+.card,
+.swipe-btn {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.quantity-btn {
+    touch-action: manipulation;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.08s ease, background 0.15s ease;
+
+    user-select: none;
+}
+
+.quantity-btn:active {
+    transform: scale(0.88);
+}
+
+.quantity-btn {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.quantity-btn:focus {
+    outline: none;
+}
