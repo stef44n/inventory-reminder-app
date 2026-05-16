@@ -16,6 +16,7 @@ export default function Consumables() {
     const [editingItemId, setEditingItemId] = useState(null);
     const [editQuantity, setEditQuantity] = useState("");
     const [showForm, setShowForm] = useState(false);
+    const [activeSwipeId, setActiveSwipeId] = useState(null);
     const syncTimeout = useRef({});
     const holdTimeoutRef = useRef(null);
     const holdIntervalRef = useRef(null);
@@ -260,6 +261,9 @@ export default function Consumables() {
                     return (
                         <SwipeCard
                             key={item.id}
+                            isActive={activeSwipeId === item.id}
+                            onActivate={() => setActiveSwipeId(item.id)}
+                            onCloseOther={() => setActiveSwipeId(null)}
                             leftAction={(close) => (
                                 <button
                                     type="button"
@@ -301,6 +305,7 @@ export default function Consumables() {
                                                 type="button"
                                                 className="quantity-btn"
                                                 onPointerDown={(e) => {
+                                                    e.stopPropagation();
                                                     e.preventDefault();
 
                                                     startHold(
@@ -326,6 +331,7 @@ export default function Consumables() {
                                                 type="button"
                                                 className="quantity-btn"
                                                 onPointerDown={(e) => {
+                                                    e.stopPropagation();
                                                     e.preventDefault();
 
                                                     startHold(

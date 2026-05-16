@@ -1,6 +1,13 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
-export default function SwipeCard({ children, leftAction, rightAction }) {
+export default function SwipeCard({
+    children,
+    leftAction,
+    rightAction,
+    isActive,
+    onActivate,
+    onCloseOther,
+}) {
     const [translateX, setTranslateX] = useState(0);
 
     const startX = useRef(0);
@@ -10,12 +17,16 @@ export default function SwipeCard({ children, leftAction, rightAction }) {
     const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
+        if (onActivate) onActivate();
+
         startX.current = e.touches[0].clientX;
         currentX.current = startX.current;
         startTime.current = Date.now();
     };
 
     const handleTouchMove = (e) => {
+        if (isActive === false) return;
+
         const x = e.touches[0].clientX;
 
         currentX.current = x;
@@ -55,9 +66,20 @@ export default function SwipeCard({ children, leftAction, rightAction }) {
         }
     };
 
-    const closeCard = () => {
+    const forceClose = () => {
         setTranslateX(0);
     };
+
+    const closeCard = () => {
+        setTranslateX(0);
+        if (onCloseOther) onCloseOther();
+    };
+
+    useEffect(() => {
+        if (!isActive) {
+            setTranslateX(0);
+        }
+    }, [isActive]);
 
     return (
         <div className="swipe-wrapper">
