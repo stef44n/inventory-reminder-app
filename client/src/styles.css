@@ -933,3 +933,24 @@ body.dark .swipe-right {
     gap: 12px;
     align-items: flex-start;
 }
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.input-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.date-input {
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+}

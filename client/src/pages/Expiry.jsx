@@ -99,11 +99,20 @@ export default function Expiry() {
                             <br />
                             <br />
 
-                            <input
-                                type="date"
-                                value={expiryDate}
-                                onChange={(e) => setExpiryDate(e.target.value)}
-                            />
+                            <div className="input-group">
+                                <label className="input-label">
+                                    Expiry Date
+                                </label>
+
+                                <input
+                                    className="date-input"
+                                    type="date"
+                                    value={expiryDate}
+                                    onChange={(e) =>
+                                        setExpiryDate(e.target.value)
+                                    }
+                                />
+                            </div>
                             <br />
                             <br />
 
