@@ -312,8 +312,17 @@ export default function Consumables() {
                                                         item.id,
                                                         item.consumable
                                                             .quantity,
-                                                        -1,
+                                                        -1, // or +1
                                                     );
+                                                }}
+                                                onTouchStart={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                                onTouchMove={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                                onTouchEnd={(e) => {
+                                                    e.stopPropagation();
                                                 }}
                                                 onPointerUp={stopHold}
                                                 onPointerLeave={stopHold}
@@ -340,6 +349,15 @@ export default function Consumables() {
                                                             .quantity,
                                                         1,
                                                     );
+                                                }}
+                                                onTouchStart={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                                onTouchMove={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                                onTouchEnd={(e) => {
+                                                    e.stopPropagation();
                                                 }}
                                                 onPointerUp={stopHold}
                                                 onPointerLeave={stopHold}
