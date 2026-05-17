@@ -29,6 +29,12 @@
 
     --skeleton-base: #e5e7eb;
     --skeleton-shimmer: rgba(255, 255, 255, 0.7);
+
+    --card-bg: #ffffff;
+
+    --nav-bg: rgba(255, 255, 255, 0.9);
+
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* DARK MODE */
@@ -59,6 +65,12 @@
 
     --skeleton-base: rgba(255, 255, 255, 0.08);
     --skeleton-shimmer: rgba(255, 255, 255, 0.14);
+
+    --card-bg: #111827;
+
+    --nav-bg: rgba(17, 24, 39, 0.9);
+
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 body {
@@ -235,13 +247,23 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 65px;
-    background: white;
-    border-top: 1px solid #e5e7eb;
+
+    height: 68px;
+
     display: flex;
     justify-content: space-around;
     align-items: center;
+
+    background: var(--nav-bg);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-top: 1px solid var(--border);
+
     z-index: 100;
+
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Nav Item */
@@ -249,9 +271,20 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 11px;
+    justify-content: center;
+
+    gap: 2px;
+
     text-decoration: none;
-    color: #6b7280;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    font-weight: 500;
+
+    min-width: 56px;
+
+    transition: all 0.18s ease;
 }
 
 /* Icon */
@@ -266,12 +299,20 @@ button {
     font-weight: 600;
 }
 
-.bottom-nav {
+/* .bottom-nav {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
+} */
 
 .nav-item:active {
     transform: scale(0.95);
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+.nav-item.active .nav-icon {
+    transform: translateY(-1px) scale(1.08);
 }
 
 /* Smooth transitions everywhere */
@@ -438,18 +479,33 @@ input:focus {
 
 .add-item-button {
     width: 100%;
-    background: white;
-    color: #2563eb;
-    border: 2px dashed #bfdbfe;
-    padding: 14px;
+
+    padding: 14px 16px;
+
     border-radius: 16px;
+
+    border: 1px solid var(--border);
+
+    background: var(--card-bg);
+
+    color: var(--text);
+
+    font-size: 15px;
     font-weight: 600;
+
     margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
+
+    box-shadow: var(--shadow);
+
+    transition: all 0.18s ease;
 }
 
 .add-item-button:hover {
-    background: #eff6ff;
+    border-color: var(--primary);
+}
+
+.add-item-button:active {
+    transform: scale(0.985);
 }
 
 /* =========================
@@ -574,30 +630,37 @@ button {
 /* Floating Action Button */
 .fab {
     position: fixed;
+
     right: 20px;
-    bottom: 88px;
+    bottom: 85px;
+
     width: 58px;
     height: 58px;
+
     border-radius: 50%;
+
     border: none;
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
+
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+
     color: white;
-    font-size: 30px;
+
+    font-size: 28px;
     font-weight: 300;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35),
-        0 4px 10px rgba(0, 0, 0, 0.15);
-    z-index: 999;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+
+    box-shadow: var(--shadow);
+
+    z-index: 120;
+
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
 .fab:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45),
-        0 6px 14px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 
 .fab:active {
