@@ -938,7 +938,7 @@ body.dark .swipe-right {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 2px;
 }
 
 .input-label {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import API from "../api/api";
 import Card from "../components/Card";
 import Header from "../components/Header";
@@ -13,6 +13,7 @@ export default function Subscriptions() {
     const [cycleDays, setCycleDays] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [activeSwipeId, setActiveSwipeId] = useState(null);
+    const nameInputRef = useRef(null);
 
     const fetchItems = async () => {
         try {
@@ -39,6 +40,14 @@ export default function Subscriptions() {
             window.removeEventListener("openAddSubscription", openForm);
         };
     }, []);
+
+    useEffect(() => {
+        if (showForm && nameInputRef.current) {
+            setTimeout(() => {
+                nameInputRef.current.focus();
+            }, 100);
+        }
+    }, [showForm]);
 
     const handleAdd = async (e) => {
         e.preventDefault();
@@ -102,6 +111,7 @@ export default function Subscriptions() {
                                 <label className="input-label">Item name</label>
 
                                 <input
+                                    ref={nameInputRef}
                                     className="date-input"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}

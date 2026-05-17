@@ -22,6 +22,7 @@ export default function Consumables() {
     const holdIntervalRef = useRef(null);
     const holdStartRef = useRef(null);
     const pendingUpdatesRef = useRef({});
+    const nameInputRef = useRef(null);
 
     const fetchItems = async () => {
         try {
@@ -54,6 +55,14 @@ export default function Consumables() {
             Object.values(syncTimeout.current).forEach(clearTimeout);
         };
     }, []);
+
+    useEffect(() => {
+        if (showForm && nameInputRef.current) {
+            setTimeout(() => {
+                nameInputRef.current.focus();
+            }, 100);
+        }
+    }, [showForm]);
 
     const handleAdd = async (e) => {
         e.preventDefault();
@@ -209,6 +218,7 @@ export default function Consumables() {
                                 <label className="input-label">Item name</label>
 
                                 <input
+                                    ref={nameInputRef}
                                     className="date-input"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
