@@ -45,6 +45,10 @@ export default function Subscriptions() {
         if (showForm && nameInputRef.current) {
             setTimeout(() => {
                 nameInputRef.current.focus();
+                nameInputRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
             }, 100);
         }
     }, [showForm]);
@@ -112,6 +116,7 @@ export default function Subscriptions() {
 
                                 <input
                                     ref={nameInputRef}
+                                    type="text"
                                     className="date-input"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}

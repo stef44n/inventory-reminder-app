@@ -45,6 +45,10 @@ export default function Chargeables() {
         if (showForm && nameInputRef.current) {
             setTimeout(() => {
                 nameInputRef.current.focus();
+                nameInputRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
             }, 100);
         }
     }, [showForm]);
