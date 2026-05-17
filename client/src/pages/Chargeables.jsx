@@ -97,20 +97,30 @@ export default function Chargeables() {
                 <div className="form-wrapper">
                     <form onSubmit={handleAdd}>
                         <div className="card">
-                            <input
-                                placeholder="Name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
+                            <div className="input-group">
+                                <label className="input-label">Item name</label>
 
-                            <input
-                                type="number"
-                                placeholder="Charge cycle (days)"
-                                value={chargeCycleDays}
-                                onChange={(e) =>
-                                    setChargeCycleDays(e.target.value)
-                                }
-                            />
+                                <input
+                                    className="date-input"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">
+                                    Charge cycle (days)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    className="date-input"
+                                    value={chargeCycleDays}
+                                    onChange={(e) =>
+                                        setChargeCycleDays(e.target.value)
+                                    }
+                                />
+                            </div>
 
                             <button type="submit" className="button-primary">
                                 Save Item

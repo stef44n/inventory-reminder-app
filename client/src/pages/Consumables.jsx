@@ -205,33 +205,55 @@ export default function Consumables() {
                 <div className="form-wrapper">
                     <form onSubmit={handleAdd}>
                         <div className="card">
-                            <input
-                                placeholder="Name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
+                            <div className="input-group">
+                                <label className="input-label">Item name</label>
 
-                            <input
-                                type="number"
-                                placeholder="Quantity"
-                                value={quantity}
-                                onChange={(e) => setQuantity(e.target.value)}
-                            />
+                                <input
+                                    className="date-input"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
 
-                            <input
-                                type="number"
-                                placeholder="Min Threshold"
-                                value={minThreshold}
-                                onChange={(e) =>
-                                    setMinThreshold(e.target.value)
-                                }
-                            />
+                            <div className="input-group">
+                                <label className="input-label">Quantity</label>
 
-                            <input
-                                placeholder="Unit (kg, litres, units)"
-                                value={unit}
-                                onChange={(e) => setUnit(e.target.value)}
-                            />
+                                <input
+                                    type="number"
+                                    className="date-input"
+                                    value={quantity}
+                                    onChange={(e) =>
+                                        setQuantity(e.target.value)
+                                    }
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">
+                                    Min Threshold
+                                </label>
+
+                                <input
+                                    type="number"
+                                    className="date-input"
+                                    value={minThreshold}
+                                    onChange={(e) =>
+                                        setMinThreshold(e.target.value)
+                                    }
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">
+                                    Unit (kg, litres, units etc)
+                                </label>
+
+                                <input
+                                    className="date-input"
+                                    value={unit}
+                                    onChange={(e) => setUnit(e.target.value)}
+                                />
+                            </div>
 
                             <button type="submit" className="button-primary">
                                 Save Item

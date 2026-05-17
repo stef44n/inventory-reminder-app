@@ -98,22 +98,30 @@ export default function Subscriptions() {
                 <div className="form-wrapper">
                     <form onSubmit={handleAdd}>
                         <div className="card">
-                            <input
-                                placeholder="Name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                            <br />
-                            <br />
+                            <div className="input-group">
+                                <label className="input-label">Item name</label>
 
-                            <input
-                                type="number"
-                                placeholder="Cycle (days)"
-                                value={cycleDays}
-                                onChange={(e) => setCycleDays(e.target.value)}
-                            />
-                            <br />
-                            <br />
+                                <input
+                                    className="date-input"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="input-group">
+                                <label className="input-label">
+                                    Cycle (days)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    className="date-input"
+                                    value={cycleDays}
+                                    onChange={(e) =>
+                                        setCycleDays(e.target.value)
+                                    }
+                                />
+                            </div>
 
                             <button type="submit" className="button-primary">
                                 Add
