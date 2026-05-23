@@ -669,7 +669,7 @@ button {
 
 /* Dark mode */
 body.dark .fab {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
 }
 
 /* Swipe wrapper */
@@ -1016,4 +1016,77 @@ body.dark .swipe-right {
     box-sizing: border-box;
     appearance: none;
     -webkit-appearance: none;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+/* Search */
+.toolbar-search {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 16px;
+
+    border: 1px solid var(--border);
+
+    background: var(--card-bg);
+
+    color: var(--text);
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+
+    box-shadow: var(--shadow);
+}
+
+/* Filter row */
+.toolbar-filters {
+    display: flex;
+    gap: 8px;
+
+    overflow-x: auto;
+
+    padding-bottom: 2px;
+
+    scrollbar-width: none;
+}
+
+.toolbar-filters::-webkit-scrollbar {
+    display: none;
+}
+
+/* Filter chip */
+.filter-chip {
+    white-space: nowrap;
+
+    padding: 8px 14px;
+
+    border-radius: 999px;
+
+    border: 1px solid var(--border);
+
+    background: var(--card-bg);
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    box-shadow: var(--shadow);
+}
+
+/* Active chip */
+.filter-chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
 }
