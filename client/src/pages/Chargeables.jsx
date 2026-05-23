@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
+import ItemToolbar from "../components/ItemToolbar";
 import toast from "react-hot-toast";
 
 export default function Chargeables() {
@@ -13,6 +14,8 @@ export default function Chargeables() {
     const [chargeCycleDays, setChargeCycleDays] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [activeSwipeId, setActiveSwipeId] = useState(null);
+    const [search, setSearch] = useState("");
+    const [activeFilter, setActiveFilter] = useState("All");
     const nameInputRef = useRef(null);
 
     const fetchItems = async () => {
@@ -94,17 +97,70 @@ export default function Chargeables() {
         }
     };
 
+    const filteredItems = items
+        .filter((item) => {
+            const matchesSearch = item.name
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
+            // calculate due state
+            const lastCharged = new Date(item.chargeable.lastChargedAt);
+
+            const nextCharge = new Date(lastCharged);
+
+            nextCharge.setDate(
+                nextCharge.getDate() + item.chargeable.chargeCycleDays,
+            );
+
+            const isDue = new Date() >= nextCharge;
+
+            if (activeFilter === "Due") {
+                return matchesSearch && isDue;
+            }
+
+            if (activeFilter === "OK") {
+                return matchesSearch && !isDue;
+            }
+
+            return matchesSearch;
+        })
+        .sort((a, b) => {
+            const getDueState = (item) => {
+                const lastCharged = new Date(item.chargeable.lastChargedAt);
+
+                const nextCharge = new Date(lastCharged);
+
+                nextCharge.setDate(
+                    nextCharge.getDate() + item.chargeable.chargeCycleDays,
+                );
+
+                return new Date() >= nextCharge;
+            };
+
+            const aDue = getDueState(a);
+            const bDue = getDueState(b);
+
+            // due items first
+            if (aDue !== bDue) {
+                return aDue ? -1 : 1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+
     return (
         <div className="container">
             <Header title="Chargeables" />
 
-            {/* Add Form */}
-            <button
-                className="add-item-button"
-                onClick={() => setShowForm(!showForm)}
-            >
-                {showForm ? "✕ Cancel" : "+ Add New Item"}
-            </button>
+            <ItemToolbar
+                search={search}
+                setSearch={setSearch}
+                filters={["All", "Due", "OK"]}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                addLabel={showForm ? "✕ Cancel" : "+ Add New Item"}
+                onAddClick={() => setShowForm(!showForm)}
+            />
 
             {showForm && (
                 <div className="form-wrapper">
@@ -157,7 +213,7 @@ export default function Chargeables() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                items.map((item) => {
+                filteredItems.map((item) => {
                     const lastCharged = new Date(item.chargeable.lastChargedAt);
                     const nextCharge = new Date(lastCharged);
                     nextCharge.setDate(

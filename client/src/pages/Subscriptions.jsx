@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import Header from "../components/Header";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
+import ItemToolbar from "../components/ItemToolbar";
 import toast from "react-hot-toast";
 
 export default function Subscriptions() {
@@ -13,6 +14,8 @@ export default function Subscriptions() {
     const [cycleDays, setCycleDays] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [activeSwipeId, setActiveSwipeId] = useState(null);
+    const [search, setSearch] = useState("");
+    const [activeFilter, setActiveFilter] = useState("All");
     const nameInputRef = useRef(null);
 
     const fetchItems = async () => {
@@ -95,17 +98,70 @@ export default function Subscriptions() {
         }
     };
 
+    const filteredItems = items
+        .filter((item) => {
+            const matchesSearch = item.name
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
+            // calculate due state
+            const lastRenewed = new Date(item.subscription.lastRenewedAt);
+
+            const nextRenewal = new Date(lastRenewed);
+
+            nextRenewal.setDate(
+                nextRenewal.getDate() + item.subscription.cycleDays,
+            );
+
+            const isDue = new Date() >= nextRenewal;
+
+            if (activeFilter === "Due") {
+                return matchesSearch && isDue;
+            }
+
+            if (activeFilter === "OK") {
+                return matchesSearch && !isDue;
+            }
+
+            return matchesSearch;
+        })
+        .sort((a, b) => {
+            const getDueState = (item) => {
+                const lastRenewed = new Date(item.subscription.lastRenewedAt);
+
+                const nextRenewal = new Date(lastRenewed);
+
+                nextRenewal.setDate(
+                    nextRenewal.getDate() + item.subscription.cycleDays,
+                );
+
+                return new Date() >= nextRenewal;
+            };
+
+            const aDue = getDueState(a);
+            const bDue = getDueState(b);
+
+            // due first
+            if (aDue !== bDue) {
+                return aDue ? -1 : 1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
+
     return (
         <div className="container">
             <Header title="Subscriptions" />
 
-            {/* Add Form */}
-            <button
-                className="add-item-button"
-                onClick={() => setShowForm(!showForm)}
-            >
-                {showForm ? "✕ Cancel" : "+ Add New Item"}
-            </button>
+            <ItemToolbar
+                search={search}
+                setSearch={setSearch}
+                filters={["All", "Due", "OK"]}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                addLabel={showForm ? "✕ Cancel" : "+ Add New Item"}
+                onAddClick={() => setShowForm(!showForm)}
+            />
 
             {showForm && (
                 <div className="form-wrapper">
@@ -159,7 +215,7 @@ export default function Subscriptions() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No subscriptions yet</p>
             ) : (
-                items.map((item) => (
+                filteredItems.map((item) => (
                     <SwipeCard
                         key={item.id}
                         isActive={activeSwipeId === item.id}

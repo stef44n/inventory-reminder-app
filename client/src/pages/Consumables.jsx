@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import Header from "../components/Header";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
+import ItemToolbar from "../components/ItemToolbar";
 import toast from "react-hot-toast";
 
 export default function Consumables() {
@@ -17,6 +18,8 @@ export default function Consumables() {
     const [editQuantity, setEditQuantity] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [activeSwipeId, setActiveSwipeId] = useState(null);
+    const [search, setSearch] = useState("");
+    const [activeFilter, setActiveFilter] = useState("All");
     const syncTimeout = useRef({});
     const holdTimeoutRef = useRef(null);
     const holdIntervalRef = useRef(null);
@@ -201,17 +204,57 @@ export default function Consumables() {
         clearInterval(holdIntervalRef.current);
     };
 
+    const filteredItems = items
+        .filter((item) => {
+            const matchesSearch = item.name
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
+            const isLow =
+                item.consumable.quantity <= item.consumable.minThreshold;
+
+            if (activeFilter === "Low") {
+                return matchesSearch && isLow;
+            }
+
+            if (activeFilter === "OK") {
+                return matchesSearch && !isLow;
+            }
+
+            return matchesSearch;
+        })
+        .sort((a, b) => {
+            const aLow = a.consumable.quantity <= a.consumable.minThreshold;
+
+            const bLow = b.consumable.quantity <= b.consumable.minThreshold;
+
+            // low stock first
+            if (aLow !== bLow) {
+                return aLow ? -1 : 1;
+            }
+
+            // then lower quantity first
+            if (a.consumable.quantity !== b.consumable.quantity) {
+                return a.consumable.quantity - b.consumable.quantity;
+            }
+
+            // alphabetical
+            return a.name.localeCompare(b.name);
+        });
+
     return (
         <div className="container">
             <Header title="Consumables" />
 
-            {/* ADD BUTTON */}
-            <button
-                className="add-item-button"
-                onClick={() => setShowForm(!showForm)}
-            >
-                {showForm ? "✕ Cancel" : "+ Add New Item"}
-            </button>
+            <ItemToolbar
+                search={search}
+                setSearch={setSearch}
+                filters={["All", "Low", "OK"]}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                addLabel={showForm ? "✕ Cancel" : "+ Add New Item"}
+                onAddClick={() => setShowForm(!showForm)}
+            />
 
             {/* FORM (hidden by default) */}
             {showForm && (
@@ -289,7 +332,7 @@ export default function Consumables() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                items.map((item) => {
+                filteredItems.map((item) => {
                     const isLow =
                         item.consumable.quantity <=
                         item.consumable.minThreshold;

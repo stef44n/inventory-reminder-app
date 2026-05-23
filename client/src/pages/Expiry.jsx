@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
+import ItemToolbar from "../components/ItemToolbar";
 import toast from "react-hot-toast";
 
 export default function Expiry() {
@@ -14,6 +15,8 @@ export default function Expiry() {
     const [notifyDaysBefore, setNotifyDaysBefore] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [activeSwipeId, setActiveSwipeId] = useState(null);
+    const [search, setSearch] = useState("");
+    const [activeFilter, setActiveFilter] = useState("All");
     const nameInputRef = useRef(null);
 
     const fetchItems = async () => {
@@ -88,17 +91,55 @@ export default function Expiry() {
         }
     };
 
+    const filteredItems = items
+        .filter((item) => {
+            const matchesSearch = item.name
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
+            const expiryDate = new Date(item.expiry.expiryDate);
+            const today = new Date();
+
+            const diffDays = Math.ceil(
+                (expiryDate - today) / (1000 * 60 * 60 * 24),
+            );
+
+            const expired = diffDays < 0;
+            const soon = diffDays <= 7;
+
+            if (activeFilter === "Expired") {
+                return matchesSearch && expired;
+            }
+
+            if (activeFilter === "Soon") {
+                return matchesSearch && soon && !expired;
+            }
+
+            if (activeFilter === "OK") {
+                return matchesSearch && diffDays > 7;
+            }
+
+            return matchesSearch;
+        })
+        .sort((a, b) => {
+            return (
+                new Date(a.expiry.expiryDate) - new Date(b.expiry.expiryDate)
+            );
+        });
+
     return (
         <div className="container">
             <Header title="Expiry Items" />
 
-            {/* Add Form */}
-            <button
-                className="add-item-button"
-                onClick={() => setShowForm(!showForm)}
-            >
-                {showForm ? "✕ Cancel" : "+ Add New Item"}
-            </button>
+            <ItemToolbar
+                search={search}
+                setSearch={setSearch}
+                filters={["All", "Expired", "Soon", "OK"]}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
+                addLabel={showForm ? "✕ Cancel" : "+ Add New Item"}
+                onAddClick={() => setShowForm(!showForm)}
+            />
 
             {showForm && (
                 <div className="form-wrapper">
@@ -166,7 +207,7 @@ export default function Expiry() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                items.map((item) => {
+                filteredItems.map((item) => {
                     const expiryDate = new Date(item.expiry.expiryDate);
                     const now = new Date();
 
