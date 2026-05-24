@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function SwipeCard({
     children,
@@ -94,17 +95,26 @@ export default function SwipeCard({
             </div>
 
             {/* CARD */}
-            <div
+            <motion.div
                 className="swipe-card"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                style={{
-                    transform: `translateX(${translateX}px)`,
+                animate={{
+                    x: translateX,
+                }}
+                transition={{
+                    type: "spring",
+                    stiffness: 380,
+                    damping: 30,
+                    mass: 0.7,
+                }}
+                whileTap={{
+                    scale: 0.995,
                 }}
             >
                 {children}
-            </div>
+            </motion.div>
         </div>
     );
 }

@@ -689,10 +689,13 @@ body.dark .fab {
     position: relative;
     z-index: 2;
     touch-action: pan-y;
-    will-change: transform;
 
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.2s ease;
+
+    will-change: transform;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
 }
 
 .swipe-card:active {
