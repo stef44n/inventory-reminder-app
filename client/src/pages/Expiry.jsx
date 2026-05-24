@@ -5,6 +5,7 @@ import Card from "../components/Card";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
+import { getExpiryStatus } from "../utils/itemStatus";
 import toast from "react-hot-toast";
 
 export default function Expiry() {
@@ -97,26 +98,18 @@ export default function Expiry() {
                 .toLowerCase()
                 .includes(search.toLowerCase());
 
-            const expiryDate = new Date(item.expiry.expiryDate);
-            const today = new Date();
-
-            const diffDays = Math.ceil(
-                (expiryDate - today) / (1000 * 60 * 60 * 24),
-            );
-
-            const expired = diffDays < 0;
-            const soon = diffDays <= 7;
+            const status = getExpiryStatus(item);
 
             if (activeFilter === "Expired") {
-                return matchesSearch && expired;
+                return matchesSearch && status === "expired";
             }
 
             if (activeFilter === "Soon") {
-                return matchesSearch && soon && !expired;
+                return matchesSearch && status === "soon";
             }
 
             if (activeFilter === "OK") {
-                return matchesSearch && diffDays > 7;
+                return matchesSearch && status === "ok";
             }
 
             return matchesSearch;
@@ -209,20 +202,24 @@ export default function Expiry() {
             ) : (
                 filteredItems.map((item) => {
                     const expiryDate = new Date(item.expiry.expiryDate);
+
                     const now = new Date();
 
                     const diffTime = expiryDate - now;
+
                     const diffDays = Math.ceil(
                         diffTime / (1000 * 60 * 60 * 24),
                     );
 
+                    const status = getExpiryStatus(item);
+
                     let statusText = "OK";
                     let statusClass = "status-ok";
 
-                    if (diffDays < 0) {
+                    if (status === "expired") {
                         statusText = "Expired";
                         statusClass = "status-expired";
-                    } else if (diffDays <= item.expiry.notifyDaysBefore) {
+                    } else if (status === "soon") {
                         statusText = "Soon";
                         statusClass = "status-soon";
                     }

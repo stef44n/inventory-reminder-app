@@ -5,6 +5,7 @@ import Card from "../components/Card";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
+import { isChargeableDue } from "../utils/itemStatus";
 import toast from "react-hot-toast";
 
 export default function Chargeables() {
@@ -103,16 +104,7 @@ export default function Chargeables() {
                 .toLowerCase()
                 .includes(search.toLowerCase());
 
-            // calculate due state
-            const lastCharged = new Date(item.chargeable.lastChargedAt);
-
-            const nextCharge = new Date(lastCharged);
-
-            nextCharge.setDate(
-                nextCharge.getDate() + item.chargeable.chargeCycleDays,
-            );
-
-            const isDue = new Date() >= nextCharge;
+            const isDue = isChargeableDue(item);
 
             if (activeFilter === "Due") {
                 return matchesSearch && isDue;
@@ -125,22 +117,9 @@ export default function Chargeables() {
             return matchesSearch;
         })
         .sort((a, b) => {
-            const getDueState = (item) => {
-                const lastCharged = new Date(item.chargeable.lastChargedAt);
+            const aDue = isChargeableDue(a);
+            const bDue = isChargeableDue(b);
 
-                const nextCharge = new Date(lastCharged);
-
-                nextCharge.setDate(
-                    nextCharge.getDate() + item.chargeable.chargeCycleDays,
-                );
-
-                return new Date() >= nextCharge;
-            };
-
-            const aDue = getDueState(a);
-            const bDue = getDueState(b);
-
-            // due items first
             if (aDue !== bDue) {
                 return aDue ? -1 : 1;
             }
@@ -214,14 +193,7 @@ export default function Chargeables() {
                 <p className="empty-text">No items yet</p>
             ) : (
                 filteredItems.map((item) => {
-                    const lastCharged = new Date(item.chargeable.lastChargedAt);
-                    const nextCharge = new Date(lastCharged);
-                    nextCharge.setDate(
-                        nextCharge.getDate() + item.chargeable.chargeCycleDays,
-                    );
-
-                    const now = new Date();
-                    const isDue = now >= nextCharge;
+                    const isDue = isChargeableDue(item);
 
                     return (
                         <SwipeCard

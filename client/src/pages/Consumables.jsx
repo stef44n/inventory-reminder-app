@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
+import { isConsumableLow } from "../utils/itemStatus";
 import toast from "react-hot-toast";
 
 export default function Consumables() {
@@ -210,8 +211,7 @@ export default function Consumables() {
                 .toLowerCase()
                 .includes(search.toLowerCase());
 
-            const isLow =
-                item.consumable.quantity <= item.consumable.minThreshold;
+            const isLow = isConsumableLow(item);
 
             if (activeFilter === "Low") {
                 return matchesSearch && isLow;
@@ -333,9 +333,7 @@ export default function Consumables() {
                 <p className="empty-text">No items yet</p>
             ) : (
                 filteredItems.map((item) => {
-                    const isLow =
-                        item.consumable.quantity <=
-                        item.consumable.minThreshold;
+                    const isLow = isConsumableLow(item);
 
                     return (
                         <SwipeCard

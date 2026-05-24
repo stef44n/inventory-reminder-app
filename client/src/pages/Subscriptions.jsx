@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
+import { isSubscriptionDue } from "../utils/itemStatus";
 import toast from "react-hot-toast";
 
 export default function Subscriptions() {
@@ -104,16 +105,7 @@ export default function Subscriptions() {
                 .toLowerCase()
                 .includes(search.toLowerCase());
 
-            // calculate due state
-            const lastRenewed = new Date(item.subscription.lastRenewedAt);
-
-            const nextRenewal = new Date(lastRenewed);
-
-            nextRenewal.setDate(
-                nextRenewal.getDate() + item.subscription.cycleDays,
-            );
-
-            const isDue = new Date() >= nextRenewal;
+            const isDue = isSubscriptionDue(item);
 
             if (activeFilter === "Due") {
                 return matchesSearch && isDue;
@@ -126,22 +118,9 @@ export default function Subscriptions() {
             return matchesSearch;
         })
         .sort((a, b) => {
-            const getDueState = (item) => {
-                const lastRenewed = new Date(item.subscription.lastRenewedAt);
+            const aDue = isSubscriptionDue(a);
+            const bDue = isSubscriptionDue(b);
 
-                const nextRenewal = new Date(lastRenewed);
-
-                nextRenewal.setDate(
-                    nextRenewal.getDate() + item.subscription.cycleDays,
-                );
-
-                return new Date() >= nextRenewal;
-            };
-
-            const aDue = getDueState(a);
-            const bDue = getDueState(b);
-
-            // due first
             if (aDue !== bDue) {
                 return aDue ? -1 : 1;
             }
