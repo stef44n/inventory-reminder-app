@@ -1,4 +1,5 @@
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Layout() {
     const navigate = useNavigate();
@@ -26,41 +27,85 @@ export default function Layout() {
     return (
         <div className="page-wrapper">
             {/* Page */}
-            <Outlet />
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={location.pathname}
+                    initial={{
+                        opacity: 0,
+                        y: 10,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        y: 0,
+                    }}
+                    exit={{
+                        opacity: 0,
+                        y: -10,
+                    }}
+                    transition={{
+                        duration: 0.18,
+                        ease: "easeOut",
+                    }}
+                >
+                    <Outlet />
+                </motion.div>
+            </AnimatePresence>
 
             {/* Floating Action Button */}
             {!hideFab && (
-                <button className="fab" onClick={handleFabClick}>
+                <motion.button
+                    className="fab"
+                    onClick={handleFabClick}
+                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.05 }}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                    }}
+                >
                     +
-                </button>
+                </motion.button>
             )}
 
             {/* Bottom Navigation */}
             <nav className="bottom-nav">
-                <NavLink to="/dashboard" className="nav-item">
-                    <span className="nav-icon">🏠</span>
-                    <span>Home</span>
-                </NavLink>
+                <motion.div whileTap={{ scale: 0.9 }}>
+                    <NavLink to="/dashboard" className="nav-item">
+                        <span className="nav-icon">🏠</span>
+                        <span>Home</span>
+                    </NavLink>{" "}
+                </motion.div>
 
-                <NavLink to="/consumables" className="nav-item">
-                    <span className="nav-icon">🧃</span>
-                    <span>Items</span>
-                </NavLink>
+                <motion.div whileTap={{ scale: 0.9 }}>
+                    <NavLink to="/consumables" className="nav-item">
+                        <span className="nav-icon">🧃</span>
+                        <span>Items</span>
+                    </NavLink>
+                </motion.div>
 
-                <NavLink to="/chargeables" className="nav-item">
-                    <span className="nav-icon">🔋</span>
-                    <span>Charge</span>
-                </NavLink>
+                <motion.div whileTap={{ scale: 0.9 }}>
+                    <NavLink to="/chargeables" className="nav-item">
+                        <span className="nav-icon">🔋</span>
+                        <span>Charge</span>
+                    </NavLink>
+                </motion.div>
 
-                <NavLink to="/expiry" className="nav-item">
-                    <span className="nav-icon">⏳</span>
-                    <span>Expiry</span>
-                </NavLink>
+                <motion.div whileTap={{ scale: 0.9 }}>
+                    <NavLink to="/expiry" className="nav-item">
+                        <span className="nav-icon">⏳</span>
+                        <span>Expiry</span>
+                    </NavLink>
+                </motion.div>
 
-                <NavLink to="/subscriptions" className="nav-item">
-                    <span className="nav-icon">🔁</span>
-                    <span>Subs</span>
-                </NavLink>
+                <motion.div whileTap={{ scale: 0.9 }}>
+                    <NavLink to="/subscriptions" className="nav-item">
+                        <span className="nav-icon">🔁</span>
+                        <span>Subs</span>
+                    </NavLink>
+                </motion.div>
             </nav>
         </div>
     );
