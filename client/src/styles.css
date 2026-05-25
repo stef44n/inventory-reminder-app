@@ -1127,3 +1127,11 @@ body.dark .swipe-right {
 .swipe-wrapper {
     isolation: isolate;
 }
+
+.swipe-card {
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.swipe-card.dragging {
+    transition: none !important;
+}

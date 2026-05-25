@@ -10,7 +10,8 @@ export default function SwipeCard({
     onCloseOther,
 }) {
     const [translateX, setTranslateX] = useState(0);
-    const isDragging = useRef(false);
+    const [dragging, setDragging] = useState(false);
+    // const isDragging = useRef(false);
 
     const startX = useRef(0);
     const currentX = useRef(0);
@@ -22,7 +23,8 @@ export default function SwipeCard({
     const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
-        isDragging.current = true;
+        // isDragging.current = true;
+        setDragging(true);
 
         if (onActivate) onActivate();
 
@@ -53,7 +55,8 @@ export default function SwipeCard({
     };
 
     const handleTouchEnd = () => {
-        isDragging.current = false;
+        // isDragging.current = false;
+        setDragging(false);
 
         const distance = currentX.current - startX.current;
         const time = Date.now() - startTime.current;
@@ -95,32 +98,28 @@ export default function SwipeCard({
             </div>
 
             {/* CARD */}
-            <motion.div
-                className="swipe-card"
-                style={{
-                    x: translateX,
-                    willChange: "transform",
-                    transform: "translateZ(0)",
-                    backfaceVisibility: "hidden",
-                }}
+            <div
+                className={`swipe-card ${dragging ? "dragging" : ""}`}
+                // style={{
+                //     x: translateX,
+                //     willChange: "transform",
+                //     transform: "translateZ(0)",
+                //     backfaceVisibility: "hidden",
+                // }}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
-                animate={{
-                    x: translateX,
-                }}
-                transition={{
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 30,
-                    mass: 0.7,
+                style={{
+                    transform: `translate3d(${translateX}px, 0, 0)`,
+                    willChange: "transform",
+                    backfaceVisibility: "hidden",
                 }}
                 whileTap={{
                     scale: 0.995,
                 }}
             >
                 {children}
-            </motion.div>
+            </div>
         </div>
     );
 }
