@@ -1093,3 +1093,10 @@ body.dark .swipe-right {
     color: white;
     border-color: var(--primary);
 }
+
+.swipe-card,
+.item-card {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
