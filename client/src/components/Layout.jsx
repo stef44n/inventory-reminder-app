@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function Layout() {
     const navigate = useNavigate();
@@ -27,29 +27,7 @@ export default function Layout() {
     return (
         <div className="page-wrapper">
             {/* Page */}
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={location.pathname}
-                    initial={{
-                        opacity: 0,
-                        y: 10,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        y: 0,
-                    }}
-                    exit={{
-                        opacity: 0,
-                        y: -10,
-                    }}
-                    transition={{
-                        duration: 0.18,
-                        ease: "easeOut",
-                    }}
-                >
-                    <Outlet />
-                </motion.div>
-            </AnimatePresence>
+            <Outlet />
 
             {/* Floating Action Button */}
             {!hideFab && (
