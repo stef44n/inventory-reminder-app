@@ -333,32 +333,38 @@ export default function Consumables() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                <AnimatePresence mode="popLayout">
+                <AnimatePresence mode="popLayout" initial={false}>
                     {filteredItems.map((item) => {
                         const isLow = isConsumableLow(item);
 
                         return (
                             <motion.div
                                 key={item.id}
-                                layout
+                                layout="position"
                                 initial={{
                                     opacity: 0,
-                                    y: 20,
-                                    scale: 0.96,
+                                    y: 14,
                                 }}
                                 animate={{
                                     opacity: 1,
                                     y: 0,
-                                    scale: 1,
                                 }}
                                 exit={{
                                     opacity: 0,
-                                    scale: 0.92,
                                     y: -10,
                                 }}
                                 transition={{
-                                    duration: 0.2,
-                                    ease: "easeOut",
+                                    layout: {
+                                        type: "spring",
+                                        stiffness: 500,
+                                        damping: 38,
+                                    },
+                                    opacity: {
+                                        duration: 0.15,
+                                    },
+                                    y: {
+                                        duration: 0.18,
+                                    },
                                 }}
                             >
                                 <SwipeCard
