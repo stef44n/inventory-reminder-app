@@ -1100,3 +1100,10 @@ body.dark .swipe-right {
     transform: translateZ(0);
     backface-visibility: hidden;
 }
+
+.card,
+.swipe-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+}

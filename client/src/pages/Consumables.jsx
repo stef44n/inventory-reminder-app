@@ -336,6 +336,7 @@ export default function Consumables() {
                 <AnimatePresence mode="popLayout" initial={false}>
                     {filteredItems.map((item) => {
                         const isLow = isConsumableLow(item);
+                        const itemKey = item.id;
 
                         return (
                             <motion.div
@@ -368,6 +369,7 @@ export default function Consumables() {
                                 }}
                             >
                                 <SwipeCard
+                                    key={itemKey}
                                     isActive={activeSwipeId === item.id}
                                     onActivate={() => setActiveSwipeId(item.id)}
                                     onCloseOther={() => setActiveSwipeId(null)}
