@@ -86,15 +86,18 @@ export default function SwipeCard({
     }, [isActive]);
 
     return (
-        <div className="swipe-wrapper">
-            {/* LEFT ACTION */}
-            <div className="swipe-action swipe-left">
-                {left.current && left.current(closeCard)}
-            </div>
+        <div className="swipe-container">
+            <div className="swipe-actions">
+                {/* LEFT ACTION */}
 
-            {/* RIGHT ACTION */}
-            <div className="swipe-action swipe-right">
-                {right.current && right.current(closeCard)}
+                <div className="swipe-action swipe-left">
+                    {left.current && left.current(closeCard)}
+                </div>
+
+                {/* RIGHT ACTION */}
+                <div className="swipe-action swipe-right">
+                    {right.current && right.current(closeCard)}
+                </div>
             </div>
 
             {/* CARD */}

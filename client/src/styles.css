@@ -1135,3 +1135,36 @@ body.dark .swipe-right {
 .swipe-card.dragging {
     transition: none !important;
 }
+
+.swipe-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.swipe-actions {
+    position: absolute;
+    inset: 0;
+
+    z-index: 1;
+
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.swipe-card {
+    position: relative;
+    z-index: 2;
+
+    background: var(--card-bg);
+
+    transform: translate3d(0, 0, 0);
+
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+.swipe-card,
+.swipe-actions,
+.swipe-action {
+    -webkit-transform: translateZ(0);
+}
