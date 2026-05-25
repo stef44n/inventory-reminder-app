@@ -16,6 +16,9 @@ export default function SwipeCard({
     const currentX = useRef(0);
     const startTime = useRef(0);
 
+    const left = useRef(leftAction);
+    const right = useRef(rightAction);
+
     const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
@@ -83,17 +86,23 @@ export default function SwipeCard({
         <div className="swipe-wrapper">
             {/* LEFT ACTION */}
             <div className="swipe-action swipe-left">
-                {leftAction && leftAction(closeCard)}
+                {left.current && left.current(closeCard)}
             </div>
 
             {/* RIGHT ACTION */}
             <div className="swipe-action swipe-right">
-                {rightAction && rightAction(closeCard)}
+                {right.current && right.current(closeCard)}
             </div>
 
             {/* CARD */}
             <motion.div
                 className="swipe-card"
+                style={{
+                    x: translateX,
+                    willChange: "transform",
+                    transform: "translateZ(0)",
+                    backfaceVisibility: "hidden",
+                }}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}

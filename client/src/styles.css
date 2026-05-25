@@ -1107,3 +1107,23 @@ body.dark .swipe-right {
     backface-visibility: hidden;
     will-change: transform;
 }
+
+.swipe-action {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* width: 100%; */
+
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    pointer-events: none;
+}
+
+.swipe-btn {
+    pointer-events: auto;
+}
+
+.swipe-wrapper {
+    isolation: isolate;
+}
