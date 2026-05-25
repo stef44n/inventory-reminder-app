@@ -10,6 +10,7 @@ export default function SwipeCard({
     onCloseOther,
 }) {
     const [translateX, setTranslateX] = useState(0);
+    const isDragging = useRef(false);
 
     const startX = useRef(0);
     const currentX = useRef(0);
@@ -18,6 +19,8 @@ export default function SwipeCard({
     const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
+        isDragging.current = true;
+
         if (onActivate) onActivate();
 
         startX.current = e.touches[0].clientX;
@@ -47,24 +50,18 @@ export default function SwipeCard({
     };
 
     const handleTouchEnd = () => {
+        isDragging.current = false;
+
         const distance = currentX.current - startX.current;
-
         const time = Date.now() - startTime.current;
-
         const velocity = distance / time;
 
-        // momentum detection
         const shouldOpenRight = distance > 55 || velocity > 0.45;
-
         const shouldOpenLeft = distance < -55 || velocity < -0.45;
 
-        if (shouldOpenRight) {
-            setTranslateX(MAX_SWIPE);
-        } else if (shouldOpenLeft) {
-            setTranslateX(-MAX_SWIPE);
-        } else {
-            setTranslateX(0);
-        }
+        if (shouldOpenRight) setTranslateX(MAX_SWIPE);
+        else if (shouldOpenLeft) setTranslateX(-MAX_SWIPE);
+        else setTranslateX(0);
     };
 
     const forceClose = () => {
@@ -77,7 +74,7 @@ export default function SwipeCard({
     };
 
     useEffect(() => {
-        if (!isActive) {
+        if (!isActive && translateX !== 0) {
             setTranslateX(0);
         }
     }, [isActive]);

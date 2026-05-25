@@ -340,7 +340,7 @@ export default function Consumables() {
                         return (
                             <motion.div
                                 key={item.id}
-                                layout="position"
+                                layoutId={`item-${item.id}`}
                                 initial={{
                                     opacity: 0,
                                     y: 14,
