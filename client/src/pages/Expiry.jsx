@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { getExpiryStatus } from "../utils/itemStatus";
+import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function Expiry() {
@@ -200,92 +201,123 @@ export default function Expiry() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                filteredItems.map((item) => {
-                    const expiryDate = new Date(item.expiry.expiryDate);
+                <AnimatePresence mode="popLayout">
+                    {filteredItems.map((item) => {
+                        const expiryDate = new Date(item.expiry.expiryDate);
 
-                    const now = new Date();
+                        const now = new Date();
 
-                    const diffTime = expiryDate - now;
+                        const diffTime = expiryDate - now;
 
-                    const diffDays = Math.ceil(
-                        diffTime / (1000 * 60 * 60 * 24),
-                    );
+                        const diffDays = Math.ceil(
+                            diffTime / (1000 * 60 * 60 * 24),
+                        );
 
-                    const status = getExpiryStatus(item);
+                        const status = getExpiryStatus(item);
 
-                    let statusText = "OK";
-                    let statusClass = "status-ok";
+                        let statusText = "OK";
+                        let statusClass = "status-ok";
 
-                    if (status === "expired") {
-                        statusText = "Expired";
-                        statusClass = "status-expired";
-                    } else if (status === "soon") {
-                        statusText = "Soon";
-                        statusClass = "status-soon";
-                    }
+                        if (status === "expired") {
+                            statusText = "Expired";
+                            statusClass = "status-expired";
+                        } else if (status === "soon") {
+                            statusText = "Soon";
+                            statusClass = "status-soon";
+                        }
 
-                    return (
-                        <SwipeCard
-                            key={item.id}
-                            isActive={activeSwipeId === item.id}
-                            onActivate={() => setActiveSwipeId(item.id)}
-                            onCloseOther={() => setActiveSwipeId(null)}
-                            rightAction={(close) => (
-                                <button
-                                    type="button"
-                                    className="swipe-btn"
-                                    onClick={() => {
-                                        handleDelete(item.id);
-                                        close();
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            )}
-                        >
-                            <Card icon="⏳">
-                                <div className="card-row">
-                                    {/* LEFT */}
-                                    <div className="card-left">
-                                        <span className="card-title">
-                                            {item.name}
-                                        </span>
-
-                                        <span className="card-subtext">
-                                            Expires:{" "}
-                                            {expiryDate.toLocaleDateString()}
-                                        </span>
-
-                                        <span className="card-subtext">
-                                            {diffDays >= 0
-                                                ? `${diffDays} day${
-                                                      diffDays !== 1 ? "s" : ""
-                                                  } left`
-                                                : `${Math.abs(diffDays)} day${
-                                                      Math.abs(diffDays) !== 1
-                                                          ? "s"
-                                                          : ""
-                                                  } overdue`}
-                                        </span>
-                                    </div>
-
-                                    {/* RIGHT */}
-                                    <div className="card-right">
-                                        {/* STATUS */}
-                                        <div
-                                            className={`status ${statusClass}`}
+                        return (
+                            <motion.div
+                                key={item.id}
+                                layout
+                                initial={{
+                                    opacity: 0,
+                                    y: 20,
+                                    scale: 0.96,
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    y: 0,
+                                    scale: 1,
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    scale: 0.92,
+                                    y: -10,
+                                }}
+                                transition={{
+                                    duration: 0.2,
+                                    ease: "easeOut",
+                                }}
+                            >
+                                <SwipeCard
+                                    isActive={activeSwipeId === item.id}
+                                    onActivate={() => setActiveSwipeId(item.id)}
+                                    onCloseOther={() => setActiveSwipeId(null)}
+                                    rightAction={(close) => (
+                                        <button
+                                            type="button"
+                                            className="swipe-btn"
+                                            onClick={() => {
+                                                handleDelete(item.id);
+                                                close();
+                                            }}
                                         >
-                                            {statusText}
-                                        </div>
+                                            Delete
+                                        </button>
+                                    )}
+                                >
+                                    <Card icon="⏳">
+                                        <div className="card-row">
+                                            {/* LEFT */}
+                                            <div className="card-left">
+                                                <span className="card-title">
+                                                    {item.name}
+                                                </span>
 
-                                        {/* ACTIONS */}
-                                        <div className="card-actions"></div>
-                                    </div>
-                                </div>
-                            </Card>
-                        </SwipeCard>
-                    );
-                })
+                                                <span className="card-subtext">
+                                                    Expires:{" "}
+                                                    {expiryDate.toLocaleDateString()}
+                                                </span>
+
+                                                <span className="card-subtext">
+                                                    {diffDays >= 0
+                                                        ? `${diffDays} day${
+                                                              diffDays !== 1
+                                                                  ? "s"
+                                                                  : ""
+                                                          } left`
+                                                        : `${Math.abs(
+                                                              diffDays,
+                                                          )} day${
+                                                              Math.abs(
+                                                                  diffDays,
+                                                              ) !== 1
+                                                                  ? "s"
+                                                                  : ""
+                                                          } overdue`}
+                                                </span>
+                                            </div>
+
+                                            {/* RIGHT */}
+                                            <div className="card-right">
+                                                {/* STATUS */}
+                                                <div
+                                                    className={`status ${statusClass}`}
+                                                >
+                                                    {statusText}
+                                                </div>
+
+                                                {/* ACTIONS */}
+                                                <div className="card-actions"></div>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </SwipeCard>
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
             )}
         </div>
     );

@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isChargeableDue } from "../utils/itemStatus";
+import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function Chargeables() {
@@ -192,75 +193,103 @@ export default function Chargeables() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                filteredItems.map((item) => {
-                    const isDue = isChargeableDue(item);
+                <AnimatePresence mode="popLayout">
+                    {filteredItems.map((item) => {
+                        const isDue = isChargeableDue(item);
 
-                    return (
-                        <SwipeCard
-                            key={item.id}
-                            isActive={activeSwipeId === item.id}
-                            onActivate={() => setActiveSwipeId(item.id)}
-                            onCloseOther={() => setActiveSwipeId(null)}
-                            leftAction={(close) => (
-                                <button
-                                    type="button"
-                                    className="swipe-btn"
-                                    onClick={() => {
-                                        handleMarkCharged(item.id);
-                                        close();
-                                    }}
-                                >
-                                    Charged
-                                </button>
-                            )}
-                            rightAction={(close) => (
-                                <button
-                                    type="button"
-                                    className="swipe-btn"
-                                    onClick={() => {
-                                        handleDelete(item.id);
-                                        close();
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            )}
-                        >
-                            <Card icon="🔋">
-                                <div className="card-row">
-                                    {/* LEFT */}
-                                    <div className="card-left">
-                                        <span className="card-title">
-                                            {item.name}
-                                        </span>
-                                        <span className="card-subtext">
-                                            Every{" "}
-                                            {item.chargeable.chargeCycleDays}{" "}
-                                            days
-                                        </span>
-                                    </div>
-
-                                    {/* RIGHT */}
-                                    <div className="card-right">
-                                        {/* STATUS */}
-                                        <div
-                                            className={`status ${
-                                                isDue
-                                                    ? "status-due"
-                                                    : "status-ok"
-                                            }`}
+                        return (
+                            <motion.div
+                                key={item.id}
+                                layout
+                                initial={{
+                                    opacity: 0,
+                                    y: 20,
+                                    scale: 0.96,
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    y: 0,
+                                    scale: 1,
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    scale: 0.92,
+                                    y: -10,
+                                }}
+                                transition={{
+                                    duration: 0.2,
+                                    ease: "easeOut",
+                                }}
+                            >
+                                <SwipeCard
+                                    isActive={activeSwipeId === item.id}
+                                    onActivate={() => setActiveSwipeId(item.id)}
+                                    onCloseOther={() => setActiveSwipeId(null)}
+                                    leftAction={(close) => (
+                                        <button
+                                            type="button"
+                                            className="swipe-btn"
+                                            onClick={() => {
+                                                handleMarkCharged(item.id);
+                                                close();
+                                            }}
                                         >
-                                            {isDue ? "Due" : "OK"}
-                                        </div>
+                                            Charged
+                                        </button>
+                                    )}
+                                    rightAction={(close) => (
+                                        <button
+                                            type="button"
+                                            className="swipe-btn"
+                                            onClick={() => {
+                                                handleDelete(item.id);
+                                                close();
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+                                >
+                                    <Card icon="🔋">
+                                        <div className="card-row">
+                                            {/* LEFT */}
+                                            <div className="card-left">
+                                                <span className="card-title">
+                                                    {item.name}
+                                                </span>
+                                                <span className="card-subtext">
+                                                    Every{" "}
+                                                    {
+                                                        item.chargeable
+                                                            .chargeCycleDays
+                                                    }{" "}
+                                                    days
+                                                </span>
+                                            </div>
 
-                                        {/* ACTIONS */}
-                                        <div className="card-actions"></div>
-                                    </div>
-                                </div>
-                            </Card>
-                        </SwipeCard>
-                    );
-                })
+                                            {/* RIGHT */}
+                                            <div className="card-right">
+                                                {/* STATUS */}
+                                                <div
+                                                    className={`status ${
+                                                        isDue
+                                                            ? "status-due"
+                                                            : "status-ok"
+                                                    }`}
+                                                >
+                                                    {isDue ? "Due" : "OK"}
+                                                </div>
+
+                                                {/* ACTIONS */}
+                                                <div className="card-actions"></div>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </SwipeCard>
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
             )}
         </div>
     );

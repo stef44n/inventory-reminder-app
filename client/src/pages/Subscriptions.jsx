@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isSubscriptionDue } from "../utils/itemStatus";
+import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function Subscriptions() {
@@ -194,115 +195,146 @@ export default function Subscriptions() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No subscriptions yet</p>
             ) : (
-                filteredItems.map((item) => (
-                    <SwipeCard
-                        key={item.id}
-                        isActive={activeSwipeId === item.id}
-                        onActivate={() => setActiveSwipeId(item.id)}
-                        onCloseOther={() => setActiveSwipeId(null)}
-                        leftAction={(close) => (
-                            <button
-                                type="button"
-                                className="swipe-btn"
-                                onClick={() => {
-                                    handleRenew(item.id);
-                                    close();
-                                }}
+                <AnimatePresence mode="popLayout">
+                    {filteredItems.map((item) => (
+                        <motion.div
+                            key={item.id}
+                            layout
+                            initial={{
+                                opacity: 0,
+                                y: 20,
+                                scale: 0.96,
+                            }}
+                            animate={{
+                                opacity: 1,
+                                y: 0,
+                                scale: 1,
+                            }}
+                            exit={{
+                                opacity: 0,
+                                scale: 0.92,
+                                y: -10,
+                            }}
+                            transition={{
+                                duration: 0.2,
+                                ease: "easeOut",
+                            }}
+                        >
+                            <SwipeCard
+                                isActive={activeSwipeId === item.id}
+                                onActivate={() => setActiveSwipeId(item.id)}
+                                onCloseOther={() => setActiveSwipeId(null)}
+                                leftAction={(close) => (
+                                    <button
+                                        type="button"
+                                        className="swipe-btn"
+                                        onClick={() => {
+                                            handleRenew(item.id);
+                                            close();
+                                        }}
+                                    >
+                                        Renew
+                                    </button>
+                                )}
+                                rightAction={(close) => (
+                                    <button
+                                        type="button"
+                                        className="swipe-btn"
+                                        onClick={() => {
+                                            handleDelete(item.id);
+                                            close();
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             >
-                                Renew
-                            </button>
-                        )}
-                        rightAction={(close) => (
-                            <button
-                                type="button"
-                                className="swipe-btn"
-                                onClick={() => {
-                                    handleDelete(item.id);
-                                    close();
-                                }}
-                            >
-                                Delete
-                            </button>
-                        )}
-                    >
-                        <Card icon="💳">
-                            {(() => {
-                                const lastRenewed = new Date(
-                                    item.subscription.lastRenewedAt,
-                                );
-                                const nextRenewal = new Date(lastRenewed);
-                                nextRenewal.setDate(
-                                    nextRenewal.getDate() +
-                                        item.subscription.cycleDays,
-                                );
+                                <Card icon="💳">
+                                    {(() => {
+                                        const lastRenewed = new Date(
+                                            item.subscription.lastRenewedAt,
+                                        );
+                                        const nextRenewal = new Date(
+                                            lastRenewed,
+                                        );
+                                        nextRenewal.setDate(
+                                            nextRenewal.getDate() +
+                                                item.subscription.cycleDays,
+                                        );
 
-                                const now = new Date();
-                                const diffTime = nextRenewal - now;
-                                const diffDays = Math.ceil(
-                                    diffTime / (1000 * 60 * 60 * 24),
-                                );
+                                        const now = new Date();
+                                        const diffTime = nextRenewal - now;
+                                        const diffDays = Math.ceil(
+                                            diffTime / (1000 * 60 * 60 * 24),
+                                        );
 
-                                let statusText = "OK";
-                                let statusClass = "status-ok";
+                                        let statusText = "OK";
+                                        let statusClass = "status-ok";
 
-                                if (diffDays < 0) {
-                                    statusText = "Due";
-                                    statusClass = "status-due";
-                                } else if (diffDays <= 2) {
-                                    statusText = "Soon";
-                                    statusClass = "status-soon";
-                                }
+                                        if (diffDays < 0) {
+                                            statusText = "Due";
+                                            statusClass = "status-due";
+                                        } else if (diffDays <= 2) {
+                                            statusText = "Soon";
+                                            statusClass = "status-soon";
+                                        }
 
-                                return (
-                                    <div className="card-row">
-                                        {/* LEFT */}
-                                        <div className="card-left">
-                                            <span className="card-title">
-                                                {item.name}
-                                            </span>
+                                        return (
+                                            <div className="card-row">
+                                                {/* LEFT */}
+                                                <div className="card-left">
+                                                    <span className="card-title">
+                                                        {item.name}
+                                                    </span>
 
-                                            <span className="card-subtext">
-                                                Every{" "}
-                                                {item.subscription.cycleDays}{" "}
-                                                days
-                                            </span>
+                                                    <span className="card-subtext">
+                                                        Every{" "}
+                                                        {
+                                                            item.subscription
+                                                                .cycleDays
+                                                        }{" "}
+                                                        days
+                                                    </span>
 
-                                            <span className="card-subtext">
-                                                {diffDays >= 0
-                                                    ? `${diffDays} day${
-                                                          diffDays !== 1
-                                                              ? "s"
-                                                              : ""
-                                                      } until renewal`
-                                                    : `${Math.abs(
-                                                          diffDays,
-                                                      )} day${
-                                                          Math.abs(diffDays) !==
-                                                          1
-                                                              ? "s"
-                                                              : ""
-                                                      } overdue`}
-                                            </span>
-                                        </div>
+                                                    <span className="card-subtext">
+                                                        {diffDays >= 0
+                                                            ? `${diffDays} day${
+                                                                  diffDays !== 1
+                                                                      ? "s"
+                                                                      : ""
+                                                              } until renewal`
+                                                            : `${Math.abs(
+                                                                  diffDays,
+                                                              )} day${
+                                                                  Math.abs(
+                                                                      diffDays,
+                                                                  ) !== 1
+                                                                      ? "s"
+                                                                      : ""
+                                                              } overdue`}
+                                                    </span>
+                                                </div>
 
-                                        {/* RIGHT */}
-                                        <div className="card-right">
-                                            {/* STATUS */}
-                                            <div
-                                                className={`status ${statusClass}`}
-                                            >
-                                                {statusText}
+                                                {/* RIGHT */}
+                                                <div className="card-right">
+                                                    {/* STATUS */}
+                                                    <div
+                                                        className={`status ${statusClass}`}
+                                                    >
+                                                        {statusText}
+                                                    </div>
+
+                                                    {/* ACTIONS */}
+                                                    <div className="card-actions"></div>
+                                                </div>
                                             </div>
-
-                                            {/* ACTIONS */}
-                                            <div className="card-actions"></div>
-                                        </div>
-                                    </div>
-                                );
-                            })()}
-                        </Card>
-                    </SwipeCard>
-                ))
+                                        );
+                                    })()}
+                                </Card>
+                            </SwipeCard>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             )}
         </div>
     );
