@@ -6,7 +6,6 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isSubscriptionDue } from "../utils/itemStatus";
-import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function Subscriptions() {
@@ -195,37 +194,9 @@ export default function Subscriptions() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No subscriptions yet</p>
             ) : (
-                <AnimatePresence mode="popLayout" initial={false}>
+                <>
                     {filteredItems.map((item) => (
-                        <motion.div
-                            key={item.id}
-                            layoutId={`item-${item.id}`}
-                            initial={{
-                                opacity: 0,
-                                y: 14,
-                            }}
-                            animate={{
-                                opacity: 1,
-                                y: 0,
-                            }}
-                            exit={{
-                                opacity: 0,
-                                y: -10,
-                            }}
-                            transition={{
-                                layout: {
-                                    type: "spring",
-                                    stiffness: 500,
-                                    damping: 38,
-                                },
-                                opacity: {
-                                    duration: 0.15,
-                                },
-                                y: {
-                                    duration: 0.18,
-                                },
-                            }}
-                        >
+                        <div key={item.id}>
                             <SwipeCard
                                 isActive={activeSwipeId === item.id}
                                 onActivate={() => setActiveSwipeId(item.id)}
@@ -338,9 +309,9 @@ export default function Subscriptions() {
                                     })()}
                                 </Card>
                             </SwipeCard>
-                        </motion.div>
+                        </div>
                     ))}
-                </AnimatePresence>
+                </>
             )}
         </div>
     );
