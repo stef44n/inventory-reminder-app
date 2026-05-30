@@ -6,7 +6,6 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isConsumableLow } from "../utils/itemStatus";
-import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function Consumables() {
@@ -333,221 +332,175 @@ export default function Consumables() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                <AnimatePresence mode="popLayout" initial={false}>
+                <>
                     {filteredItems.map((item) => {
                         const isLow = isConsumableLow(item);
-                        const itemKey = item.id;
 
                         return (
-                            <motion.div
+                            <SwipeCard
                                 key={item.id}
-                                layoutId={`item-${item.id}`}
-                                initial={{
-                                    opacity: 0,
-                                    y: 14,
-                                }}
-                                animate={{
-                                    opacity: 1,
-                                    y: 0,
-                                }}
-                                exit={{
-                                    opacity: 0,
-                                    y: -10,
-                                }}
-                                transition={{
-                                    layout: {
-                                        type: "spring",
-                                        stiffness: 500,
-                                        damping: 38,
-                                    },
-                                    opacity: {
-                                        duration: 0.15,
-                                    },
-                                    y: {
-                                        duration: 0.18,
-                                    },
-                                }}
+                                isActive={activeSwipeId === item.id}
+                                onActivate={() => setActiveSwipeId(item.id)}
+                                onCloseOther={() => setActiveSwipeId(null)}
+                                leftAction={(close) => (
+                                    <button
+                                        type="button"
+                                        className="swipe-btn"
+                                        onClick={() => {
+                                            setEditingItemId(item.id);
+                                            setEditQuantity(
+                                                item.consumable.quantity,
+                                            );
+                                            close();
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                )}
+                                rightAction={(close) => (
+                                    <button
+                                        type="button"
+                                        className="swipe-btn"
+                                        onClick={() => {
+                                            handleDelete(item.id);
+                                            close();
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             >
-                                <SwipeCard
-                                    key={itemKey}
-                                    isActive={activeSwipeId === item.id}
-                                    onActivate={() => setActiveSwipeId(item.id)}
-                                    onCloseOther={() => setActiveSwipeId(null)}
-                                    leftAction={(close) => (
-                                        <button
-                                            type="button"
-                                            className="swipe-btn"
-                                            onClick={() => {
-                                                setEditingItemId(item.id);
-                                                setEditQuantity(
-                                                    item.consumable.quantity,
-                                                );
-                                                close();
-                                            }}
-                                        >
-                                            Edit
-                                        </button>
-                                    )}
-                                    rightAction={(close) => (
-                                        <button
-                                            type="button"
-                                            className="swipe-btn"
-                                            onClick={() => {
-                                                handleDelete(item.id);
-                                                close();
-                                            }}
-                                        >
-                                            Delete
-                                        </button>
-                                    )}
-                                >
-                                    <Card icon="🧃">
-                                        <div className="card-row">
-                                            {/* LEFT */}
-                                            <div className="card-left">
-                                                <span className="card-title">
-                                                    {item.name}
-                                                </span>
+                                <Card icon="🧃">
+                                    <div className="card-row">
+                                        {/* LEFT */}
+                                        <div className="card-left">
+                                            <span className="card-title">
+                                                {item.name}
+                                            </span>
 
-                                                <div className="quantity-row">
-                                                    <button
-                                                        type="button"
-                                                        className="quantity-btn"
-                                                        onPointerDown={(e) => {
-                                                            e.stopPropagation();
-                                                            e.preventDefault();
+                                            <div className="quantity-row">
+                                                <button
+                                                    type="button"
+                                                    className="quantity-btn"
+                                                    onPointerDown={(e) => {
+                                                        e.stopPropagation();
+                                                        e.preventDefault();
 
-                                                            startHold(
-                                                                item.id,
-                                                                item.consumable
-                                                                    .quantity,
-                                                                -1, // or +1
-                                                            );
-                                                        }}
-                                                        onTouchStart={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onTouchMove={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onTouchEnd={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onPointerUp={stopHold}
-                                                        onPointerLeave={
-                                                            stopHold
-                                                        }
-                                                        onPointerCancel={
-                                                            stopHold
-                                                        }
-                                                    >
-                                                        −
-                                                    </button>
-
-                                                    <span className="quantity-value">
-                                                        {
+                                                        startHold(
+                                                            item.id,
                                                             item.consumable
-                                                                .quantity
-                                                        }{" "}
-                                                        {item.consumable.unit}
-                                                    </span>
+                                                                .quantity,
+                                                            -1, // or +1
+                                                        );
+                                                    }}
+                                                    onTouchStart={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onTouchMove={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onTouchEnd={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onPointerUp={stopHold}
+                                                    onPointerLeave={stopHold}
+                                                    onPointerCancel={stopHold}
+                                                >
+                                                    −
+                                                </button>
 
-                                                    <button
-                                                        type="button"
-                                                        className="quantity-btn"
-                                                        onPointerDown={(e) => {
-                                                            e.stopPropagation();
-                                                            e.preventDefault();
-
-                                                            startHold(
-                                                                item.id,
-                                                                item.consumable
-                                                                    .quantity,
-                                                                1,
-                                                            );
-                                                        }}
-                                                        onTouchStart={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onTouchMove={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onTouchEnd={(e) => {
-                                                            e.stopPropagation();
-                                                        }}
-                                                        onPointerUp={stopHold}
-                                                        onPointerLeave={
-                                                            stopHold
-                                                        }
-                                                        onPointerCancel={
-                                                            stopHold
-                                                        }
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div>
-
-                                                <span className="card-subtext">
-                                                    Min:{" "}
-                                                    {
-                                                        item.consumable
-                                                            .minThreshold
-                                                    }{" "}
+                                                <span className="quantity-value">
+                                                    {item.consumable.quantity}{" "}
                                                     {item.consumable.unit}
                                                 </span>
-                                            </div>
 
-                                            {/* RIGHT */}
-                                            <div className="card-right">
-                                                {/* STATUS */}
-                                                <div
-                                                    className={`status ${
-                                                        isLow
-                                                            ? "status-due"
-                                                            : "status-ok"
-                                                    }`}
+                                                <button
+                                                    type="button"
+                                                    className="quantity-btn"
+                                                    onPointerDown={(e) => {
+                                                        e.stopPropagation();
+                                                        e.preventDefault();
+
+                                                        startHold(
+                                                            item.id,
+                                                            item.consumable
+                                                                .quantity,
+                                                            1,
+                                                        );
+                                                    }}
+                                                    onTouchStart={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onTouchMove={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onTouchEnd={(e) => {
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onPointerUp={stopHold}
+                                                    onPointerLeave={stopHold}
+                                                    onPointerCancel={stopHold}
                                                 >
-                                                    {isLow ? "Low" : "OK"}
-                                                </div>
-
-                                                {/* ACTIONS */}
-                                                <div className="card-actions"></div>
-
-                                                {/* EDIT SECTION */}
-                                                {editingItemId === item.id && (
-                                                    <div className="edit-section">
-                                                        <input
-                                                            type="number"
-                                                            value={editQuantity}
-                                                            onChange={(e) =>
-                                                                setEditQuantity(
-                                                                    e.target
-                                                                        .value,
-                                                                )
-                                                            }
-                                                        />
-
-                                                        <button
-                                                            type="button"
-                                                            className="button-small"
-                                                            onClick={() =>
-                                                                handleUpdate(
-                                                                    item.id,
-                                                                )
-                                                            }
-                                                        >
-                                                            Save
-                                                        </button>
-                                                    </div>
-                                                )}
+                                                    +
+                                                </button>
                                             </div>
+
+                                            <span className="card-subtext">
+                                                Min:{" "}
+                                                {item.consumable.minThreshold}{" "}
+                                                {item.consumable.unit}
+                                            </span>
                                         </div>
-                                    </Card>
-                                </SwipeCard>
-                            </motion.div>
+
+                                        {/* RIGHT */}
+                                        <div className="card-right">
+                                            {/* STATUS */}
+                                            <div
+                                                className={`status ${
+                                                    isLow
+                                                        ? "status-due"
+                                                        : "status-ok"
+                                                }`}
+                                            >
+                                                {isLow ? "Low" : "OK"}
+                                            </div>
+
+                                            {/* ACTIONS */}
+                                            <div className="card-actions"></div>
+
+                                            {/* EDIT SECTION */}
+                                            {editingItemId === item.id && (
+                                                <div className="edit-section">
+                                                    <input
+                                                        type="number"
+                                                        value={editQuantity}
+                                                        onChange={(e) =>
+                                                            setEditQuantity(
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                    />
+
+                                                    <button
+                                                        type="button"
+                                                        className="button-small"
+                                                        onClick={() =>
+                                                            handleUpdate(
+                                                                item.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Card>
+                            </SwipeCard>
                         );
                     })}
-                </AnimatePresence>
+                </>
             )}
         </div>
     );

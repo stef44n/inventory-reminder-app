@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
 
 export default function SwipeCard({
     children,
@@ -10,21 +9,16 @@ export default function SwipeCard({
     onCloseOther,
 }) {
     const [translateX, setTranslateX] = useState(0);
-    const [dragging, setDragging] = useState(false);
     // const isDragging = useRef(false);
 
     const startX = useRef(0);
     const currentX = useRef(0);
     const startTime = useRef(0);
 
-    const left = useRef(leftAction);
-    const right = useRef(rightAction);
-
     const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
         // isDragging.current = true;
-        setDragging(true);
 
         if (onActivate) onActivate();
 
@@ -56,7 +50,6 @@ export default function SwipeCard({
 
     const handleTouchEnd = () => {
         // isDragging.current = false;
-        setDragging(false);
 
         const distance = currentX.current - startX.current;
         const time = Date.now() - startTime.current;
@@ -91,24 +84,18 @@ export default function SwipeCard({
                 {/* LEFT ACTION */}
 
                 <div className="swipe-action swipe-left">
-                    {left.current && left.current(closeCard)}
+                    {leftAction && leftAction(closeCard)}
                 </div>
 
                 {/* RIGHT ACTION */}
                 <div className="swipe-action swipe-right">
-                    {right.current && right.current(closeCard)}
+                    {rightAction && rightAction(closeCard)}
                 </div>
             </div>
 
             {/* CARD */}
             <div
-                className={`swipe-card ${dragging ? "dragging" : ""}`}
-                // style={{
-                //     x: translateX,
-                //     willChange: "transform",
-                //     transform: "translateZ(0)",
-                //     backfaceVisibility: "hidden",
-                // }}
+                className="swipe-card"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
@@ -116,9 +103,6 @@ export default function SwipeCard({
                     transform: `translate3d(${translateX}px, 0, 0)`,
                     willChange: "transform",
                     backfaceVisibility: "hidden",
-                }}
-                whileTap={{
-                    scale: 0.995,
                 }}
             >
                 {children}
