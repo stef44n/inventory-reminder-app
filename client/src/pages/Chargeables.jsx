@@ -6,7 +6,6 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isChargeableDue } from "../utils/itemStatus";
-import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function Chargeables() {
@@ -193,109 +192,80 @@ export default function Chargeables() {
             ) : items.length === 0 ? (
                 <p className="empty-text">No items yet</p>
             ) : (
-                <AnimatePresence mode="popLayout" initial={false}>
+                <>
                     {filteredItems.map((item) => {
                         const isDue = isChargeableDue(item);
 
                         return (
-                            <motion.div
+                            <SwipeCard
                                 key={item.id}
-                                layoutId={`item-${item.id}`}
-                                initial={{
-                                    opacity: 0,
-                                    y: 14,
-                                }}
-                                animate={{
-                                    opacity: 1,
-                                    y: 0,
-                                }}
-                                exit={{
-                                    opacity: 0,
-                                    y: -10,
-                                }}
-                                transition={{
-                                    layout: {
-                                        type: "spring",
-                                        stiffness: 500,
-                                        damping: 38,
-                                    },
-                                    opacity: {
-                                        duration: 0.15,
-                                    },
-                                    y: {
-                                        duration: 0.18,
-                                    },
-                                }}
+                                isActive={activeSwipeId === item.id}
+                                onActivate={() => setActiveSwipeId(item.id)}
+                                onCloseOther={() => setActiveSwipeId(null)}
+                                leftAction={(close) => (
+                                    <button
+                                        type="button"
+                                        className="swipe-btn"
+                                        onClick={() => {
+                                            handleMarkCharged(item.id);
+                                            close();
+                                        }}
+                                    >
+                                        Charged
+                                    </button>
+                                )}
+                                rightAction={(close) => (
+                                    <button
+                                        type="button"
+                                        className="swipe-btn"
+                                        onClick={() => {
+                                            handleDelete(item.id);
+                                            close();
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             >
-                                <SwipeCard
-                                    isActive={activeSwipeId === item.id}
-                                    onActivate={() => setActiveSwipeId(item.id)}
-                                    onCloseOther={() => setActiveSwipeId(null)}
-                                    leftAction={(close) => (
-                                        <button
-                                            type="button"
-                                            className="swipe-btn"
-                                            onClick={() => {
-                                                handleMarkCharged(item.id);
-                                                close();
-                                            }}
-                                        >
-                                            Charged
-                                        </button>
-                                    )}
-                                    rightAction={(close) => (
-                                        <button
-                                            type="button"
-                                            className="swipe-btn"
-                                            onClick={() => {
-                                                handleDelete(item.id);
-                                                close();
-                                            }}
-                                        >
-                                            Delete
-                                        </button>
-                                    )}
-                                >
-                                    <Card icon="🔋">
-                                        <div className="card-row">
-                                            {/* LEFT */}
-                                            <div className="card-left">
-                                                <span className="card-title">
-                                                    {item.name}
-                                                </span>
-                                                <span className="card-subtext">
-                                                    Every{" "}
-                                                    {
-                                                        item.chargeable
-                                                            .chargeCycleDays
-                                                    }{" "}
-                                                    days
-                                                </span>
-                                            </div>
-
-                                            {/* RIGHT */}
-                                            <div className="card-right">
-                                                {/* STATUS */}
-                                                <div
-                                                    className={`status ${
-                                                        isDue
-                                                            ? "status-due"
-                                                            : "status-ok"
-                                                    }`}
-                                                >
-                                                    {isDue ? "Due" : "OK"}
-                                                </div>
-
-                                                {/* ACTIONS */}
-                                                <div className="card-actions"></div>
-                                            </div>
+                                <Card icon="🔋">
+                                    <div className="card-row">
+                                        {/* LEFT */}
+                                        <div className="card-left">
+                                            <span className="card-title">
+                                                {item.name}
+                                            </span>
+                                            <span className="card-subtext">
+                                                Every{" "}
+                                                {
+                                                    item.chargeable
+                                                        .chargeCycleDays
+                                                }{" "}
+                                                days
+                                            </span>
                                         </div>
-                                    </Card>
-                                </SwipeCard>
-                            </motion.div>
+
+                                        {/* RIGHT */}
+                                        <div className="card-right">
+                                            {/* STATUS */}
+                                            <div
+                                                className={`status ${
+                                                    isDue
+                                                        ? "status-due"
+                                                        : "status-ok"
+                                                }`}
+                                            >
+                                                {isDue ? "Due" : "OK"}
+                                            </div>
+
+                                            {/* ACTIONS */}
+                                            <div className="card-actions"></div>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </SwipeCard>
                         );
                     })}
-                </AnimatePresence>
+                </>
             )}
         </div>
     );
