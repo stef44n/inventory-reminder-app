@@ -22,9 +22,9 @@ export async function undoDelete({
                             try {
                                 const payload = buildRestorePayload(item);
 
-                                await API.post(endpoint, payload);
+                                const res = await API.post(endpoint, payload);
 
-                                setItems((prev) => [...prev, item]);
+                                setItems((prev) => [...prev, res.data]);
 
                                 toast.dismiss(t.id);
                             } catch (err) {
