@@ -6,7 +6,8 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isConsumableLow } from "../utils/itemStatus";
-import { deleteWithUndo } from "../utils/undoDelete";
+// import { deleteWithUndo } from "../utils/undoDelete";
+import { undoDelete } from "../utils/undoDelete";
 import toast from "react-hot-toast";
 
 export default function Consumables() {
@@ -111,13 +112,19 @@ export default function Consumables() {
         }
     };
 
-    const handleDelete = (item) => {
-        deleteWithUndo({
-            id: item.id,
+    const handleDelete = async (item) => {
+        await undoDelete({
             item,
-            setItems,
             endpoint: "/consumables",
-            restoreEndpoint: "/consumables",
+            setItems,
+
+            buildRestorePayload: (item) => ({
+                name: item.name,
+                category: "CONSUMABLE",
+                quantity: item.consumable.quantity,
+                minThreshold: item.consumable.minThreshold,
+                unit: item.consumable.unit,
+            }),
         });
     };
 
