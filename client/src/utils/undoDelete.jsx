@@ -12,7 +12,7 @@ export async function undoDelete({
 
         setItems((prev) => prev.filter((existing) => existing.id !== item.id));
 
-        toast(
+        const toastId = toast(
             (t) => (
                 <span>
                     Item deleted
@@ -37,10 +37,14 @@ export async function undoDelete({
                     </button>
                 </span>
             ),
-            {
-                duration: 5000,
-            },
+
+            // {
+            //     duration: 5000,
+            // },
         );
+        setTimeout(() => {
+            toast.dismiss(toastId);
+        }, 5000);
     } catch (err) {
         console.error(err);
         toast.error("Delete failed");
