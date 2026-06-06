@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isConsumableLow } from "../utils/itemStatus";
+import { deleteWithUndo } from "../utils/undoDelete";
 import toast from "react-hot-toast";
 
 export default function Consumables() {
@@ -21,6 +22,8 @@ export default function Consumables() {
     const [activeSwipeId, setActiveSwipeId] = useState(null);
     const [search, setSearch] = useState("");
     const [activeFilter, setActiveFilter] = useState("All");
+    const deleteTimers = useRef({});
+    const pendingDeletes = useRef({});
     const syncTimeout = useRef({});
     const holdTimeoutRef = useRef(null);
     const holdIntervalRef = useRef(null);
@@ -56,7 +59,17 @@ export default function Consumables() {
 
             clearTimeout(holdTimeoutRef.current);
             clearInterval(holdIntervalRef.current);
+
             Object.values(syncTimeout.current).forEach(clearTimeout);
+            Object.values(deleteTimers.current).forEach(clearTimeout);
+
+            Object.keys(pendingDeletes.current).forEach(async (id) => {
+                try {
+                    await API.delete(`/consumables/${id}`);
+                } catch (err) {
+                    console.error(err);
+                }
+            });
         };
     }, []);
 
@@ -98,14 +111,14 @@ export default function Consumables() {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await API.delete(`/consumables/${id}`);
-            fetchItems();
-            toast.success("Item deleted");
-        } catch (err) {
-            console.error(err);
-        }
+    const handleDelete = (item) => {
+        deleteWithUndo({
+            id: item.id,
+            item,
+            setItems,
+            endpoint: "/consumables",
+            restoreEndpoint: "/consumables",
+        });
     };
 
     const handleUpdate = async (id) => {
@@ -362,7 +375,7 @@ export default function Consumables() {
                                         type="button"
                                         className="swipe-btn"
                                         onClick={() => {
-                                            handleDelete(item.id);
+                                            handleDelete(item);
                                             close();
                                         }}
                                     >
