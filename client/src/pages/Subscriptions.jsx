@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isSubscriptionDue } from "../utils/itemStatus";
+import { undoDelete } from "../utils/undoDelete";
 import toast from "react-hot-toast";
 
 export default function Subscriptions() {
@@ -79,14 +80,18 @@ export default function Subscriptions() {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await API.delete(`/subscriptions/${id}`);
-            fetchItems();
-            toast.success("Item deleted");
-        } catch (err) {
-            console.error(err);
-        }
+    const handleDelete = async (item) => {
+        await undoDelete({
+            item,
+            endpoint: "/subscriptions",
+            setItems,
+
+            buildRestorePayload: (item) => ({
+                name: item.name,
+                category: "SUBSCRIPTION",
+                cycleDays: item.subscription.cycleDays,
+            }),
+        });
     };
 
     const handleRenew = async (id) => {
@@ -218,7 +223,7 @@ export default function Subscriptions() {
                                         type="button"
                                         className="swipe-btn"
                                         onClick={() => {
-                                            handleDelete(item.id);
+                                            handleDelete(item);
                                             close();
                                         }}
                                     >

@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { getExpiryStatus } from "../utils/itemStatus";
+import { undoDelete } from "../utils/undoDelete";
 import toast from "react-hot-toast";
 
 export default function Expiry() {
@@ -82,14 +83,19 @@ export default function Expiry() {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await API.delete(`/expiry/${id}`);
-            fetchItems();
-            toast.success("Item deleted");
-        } catch (err) {
-            console.error(err);
-        }
+    const handleDelete = async (item) => {
+        await undoDelete({
+            item,
+            endpoint: "/expiry",
+            setItems,
+
+            buildRestorePayload: (item) => ({
+                name: item.name,
+                category: "EXPIRY",
+                expiryDate: item.expiry.expiryDate,
+                notifyDaysBefore: item.expiry.notifyDaysBefore,
+            }),
+        });
     };
 
     const filteredItems = items
@@ -236,7 +242,7 @@ export default function Expiry() {
                                             type="button"
                                             className="swipe-btn"
                                             onClick={() => {
-                                                handleDelete(item.id);
+                                                handleDelete(item);
                                                 close();
                                             }}
                                         >

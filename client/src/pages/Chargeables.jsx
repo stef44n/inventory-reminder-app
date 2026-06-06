@@ -6,6 +6,7 @@ import SwipeCard from "../components/SwipeCard";
 import SkeletonCard from "../components/SkeletonCard";
 import ItemToolbar from "../components/ItemToolbar";
 import { isChargeableDue } from "../utils/itemStatus";
+import { undoDelete } from "../utils/undoDelete";
 import toast from "react-hot-toast";
 
 export default function Chargeables() {
@@ -79,14 +80,18 @@ export default function Chargeables() {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await API.delete(`/chargeables/${id}`);
-            fetchItems();
-            toast.success("Item deleted");
-        } catch (err) {
-            console.error(err);
-        }
+    const handleDelete = async (item) => {
+        await undoDelete({
+            item,
+            endpoint: "/chargeables",
+            setItems,
+
+            buildRestorePayload: (item) => ({
+                name: item.name,
+                category: "CHARGEABLE",
+                chargeCycleDays: item.chargeable.chargeCycleDays,
+            }),
+        });
     };
 
     const handleMarkCharged = async (id) => {
@@ -219,7 +224,7 @@ export default function Chargeables() {
                                         type="button"
                                         className="swipe-btn"
                                         onClick={() => {
-                                            handleDelete(item.id);
+                                            handleDelete(item);
                                             close();
                                         }}
                                     >
