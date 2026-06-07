@@ -1168,3 +1168,7 @@ body.dark .swipe-right {
 .swipe-action {
     -webkit-transform: translateZ(0);
 }
+
+.swipe-card {
+    touch-action: pan-y;
+}

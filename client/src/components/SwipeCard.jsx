@@ -9,34 +9,63 @@ export default function SwipeCard({
     onCloseOther,
 }) {
     const [translateX, setTranslateX] = useState(0);
+    const [dragging, setDragging] = useState(null);
     // const isDragging = useRef(false);
 
     const startX = useRef(0);
     const currentX = useRef(0);
     const startTime = useRef(0);
+    const startY = useRef(0);
+    const gestureLocked = useRef(false);
+    const gestureDirection = useRef(null);
 
     const MAX_SWIPE = 90;
 
     const handleTouchStart = (e) => {
-        // isDragging.current = true;
+        setDragging(true);
 
         if (onActivate) onActivate();
 
         startX.current = e.touches[0].clientX;
         currentX.current = startX.current;
+
+        startY.current = e.touches[0].clientY;
+
+        gestureLocked.current = false;
+        gestureDirection.current = null;
+
         startTime.current = Date.now();
     };
 
     const handleTouchMove = (e) => {
         if (isActive === false) return;
 
-        const x = e.touches[0].clientX;
+        const touch = e.touches[0];
 
-        currentX.current = x;
+        const diffX = touch.clientX - startX.current;
+        const diffY = touch.clientY - startY.current;
 
-        let diff = x - startX.current;
+        if (!gestureLocked.current) {
+            const distance = Math.sqrt(diffX * diffX + diffY * diffY);
 
-        // resistance near edges
+            if (distance < 8) {
+                return;
+            }
+
+            gestureLocked.current = true;
+
+            gestureDirection.current =
+                Math.abs(diffX) > Math.abs(diffY) ? "horizontal" : "vertical";
+        }
+
+        if (gestureDirection.current === "vertical") {
+            return;
+        }
+
+        currentX.current = touch.clientX;
+
+        let diff = diffX;
+
         if (diff > MAX_SWIPE) {
             diff = MAX_SWIPE + (diff - MAX_SWIPE) * 0.2;
         }
@@ -50,6 +79,8 @@ export default function SwipeCard({
 
     const handleTouchEnd = () => {
         // isDragging.current = false;
+        gestureLocked.current = false;
+        gestureDirection.current = null;
 
         const distance = currentX.current - startX.current;
         const time = Date.now() - startTime.current;
